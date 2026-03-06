@@ -84,11 +84,14 @@ WSGI_APPLICATION = 'cookbook.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'somacookbook',
-        'USER': 'somauser',
-        'PASSWORD': '12345678',
+        'NAME': 'cookbook_db',
+        'USER': 'postgres',
+        'PASSWORD': 'root',
         'HOST': 'localhost',
         'PORT': '5432',
+        'OPTIONS': {
+            'client_encoding': 'UTF8',
+        },
     }
 }
 
