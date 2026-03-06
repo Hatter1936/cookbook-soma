@@ -441,6 +441,68 @@
     transform: translateY(-2px);
   }
 
+  .onerecipe {
+    margin-top: 70px;
+    padding: 40px 50px;
+    background-color: var(--div-color);
+    border-radius: 50px;
+    width: auto;
+    height: 700px;
+    box-shadow: var(--shadow-div);
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 70px;
+    border: 3px solid var(--dark-brown);
+    gap: 50px;
+  }
+
+  .onerecipe-info {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+  }
+
+  .onerecipe-info-maininfo {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .onerecipe-info-maininfo p {
+    font-size: 18px;
+  }
+
+  .onerecipe-info img {
+    width: 300px;
+    border-radius: 30px;
+  }
+
+  .onerecipe-ingredients {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .onerecipe-ingredients-list {
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 100px;;
+  }
+
+  .onerecipe-ingredients-list-ingredient {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 16px;
+  }
+
+  .onerecipe-ingredients-list-ingredient-text {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+  }
+
   .form label {
     font-size: 18px;
   }

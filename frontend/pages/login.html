@@ -34,12 +34,12 @@
             <div class="authorization-block">
                 <div class="form">
                     <h2 class="form-auth">Войти в аккаунт</h2>
-                    <p>Это сайт с рецептами для всей семьи /протягивает кальмара в шоколаде/</p>
-                    <form action="{% url 'api/auth/users/login/' %}" method="POST">
+                    <p>Это сайт с рецептами для всей семьи<br>/протягивает кальмара в шоколаде/</p>
+                    <form id="loginForm">
                         <label for="username">Логин</label><br>
-                        <input type="text" id="username" name="username"><br>
+                        <input type="text" id="username" name="username" required><br>
                         <label for="password">Пароль</label><br>
-                        <input type="password" id="password" name="password">
+                        <input type="password" id="password" name="password" required>
                         <input type="submit" id="sign-in" class="btn" value="Войти">
                     </form>
                     <p style="margin-left: 32%;"><a href="register.html">Нет аккаунта?</a></p>
