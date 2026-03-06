@@ -35,14 +35,14 @@
             <div class="form">
                 <h2 class="form-register">Создание аккаунта</h2>
                 <p>Это сайт с рецептами для всей семьи /протягивает кальмара в шоколаде/</p>
-                <form>
+                <form action="/submit_page.php" method="POST">
                     <label for="username">Логин</label><br>
                     <input type="text" id="username" name="username"><br>
                     <label for="password">Пароль</label><br>
                     <input type="text" id="password" name="password">
                     <label for="password">Подтвердите пароль</label><br>
                     <input type="text" id="password" name="password">
-                    <input type="button" id="sign-in" class="btn" value="Зарегистрироваться">
+                    <input type="submit" id="sign-in" class="btn" value="Зарегистрироваться">
                 </form>
                 <p style="margin-left: 32%;"><a href="register.html">Есть аккаунт?</a></p>
             </div>
