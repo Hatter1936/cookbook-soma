@@ -447,7 +447,7 @@
     background-color: var(--div-color);
     border-radius: 50px;
     width: auto;
-    height: 700px;
+    height: auto;
     box-shadow: var(--shadow-div);
     display: flex;
     flex-direction: column;
@@ -484,7 +484,7 @@
   }
 
   .onerecipe-ingredients-list {
-    padding: 0 20px;
+    padding: 0 10px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0 100px;;
@@ -501,6 +501,49 @@
     display: flex;
     flex-direction: row;
     gap: 5px;
+  }
+
+  .onerecipe-steps{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .onerecipe-steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .onerecipe-steps-list-step {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 30px;
+    padding: 20px 20px 10px 30px;
+    background-color: var(--vanilla);
+    border-radius: 30px;
+    box-shadow: var(--shadow-div);
+    overflow: hidden;
+    transition: var(--transition);
+    height: auto;
+    min-height: 150px;
+    border: 3px solid var(--dark-brown);
+  }
+
+  .onerecipe-steps-list-step p {
+    font-size: 18px;
+  }
+
+  .onerecipe-steps-list-step-text {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .onerecipe-steps-list-step img {
+    border-radius: 20px;
+    height: auto;
+    width: auto;
   }
 
   .form label {
