@@ -222,6 +222,81 @@
     width: 430px;
   }
 
+  .recipes {
+    border-radius: 50px;
+    width: auto;
+    height: 700px;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+    margin-bottom: 70px;
+  }
+
+  .recipes-element {
+    width: auto;
+    height: 150px;
+    background-color: var(--div-color);
+    border-radius: 100px;
+    box-shadow: var(--shadow-div);
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  .recipes-element img {
+    border-top-left-radius: 100px;
+    border-bottom-left-radius: 100px;
+  }
+
+  .recipes-text {
+    display: flex;
+    flex-direction: column;
+    hyphens: auto;
+  }
+
+  .recipes-text-title {
+    font-size: 24px;
+  }
+
+  .recipes-text-description {
+    font-weight: normal;
+    font-size: 18px;
+  }
+
+  .recipes-text-p {
+    font-weight: normal;
+    font-size: 16px;
+    font-style: italic;
+  }
+
+  .recipes-element div {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    overflow-wrap: break-word;
+  }
+
+  #addrecipe {
+    margin-top: 30px;
+    width: 250px;
+    height: 50px;
+    font-size: 18px;
+    font-family: 'Chiron GoRound TC', sans-serif;
+    font-weight: bold;
+  }
+
+  .filter {
+    margin: 30px 15px 20px 20px;
+    font-family: 'Chiron GoRound TC', sans-serif;
+    font-size: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .filter p:hover {
+    color:#4d3933;
+  }
+
   .form label {
     font-size: 18px;
   }

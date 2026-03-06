@@ -29,23 +29,23 @@
     </header>
 
     <div class="container">
-    <div class="authorization">
-        <img src="../assets/images/bakery.png" class="authorization-block">
-        <div class="authorization-block">
-            <div class="form">
-                <h2 class="form-auth">Войти в аккаунт</h2>
-                <p>Это сайт с рецептами для всей семьи /протягивает кальмара в шоколаде/</p>
-                <form action="{% url 'api/auth/users/login/' %}" method="POST">
-                    <label for="username">Логин</label><br>
-                    <input type="text" id="username" name="username"><br>
-                    <label for="password">Пароль</label><br>
-                    <input type="password" id="password" name="password">
-                    <input type="submit" id="sign-in" class="btn" value="Войти">
-                </form>
-                <p style="margin-left: 32%;"><a href="register.html">Нет аккаунта?</a></p>
+        <div class="authorization">
+            <img src="../assets/images/bakery.png" class="authorization-block">
+            <div class="authorization-block">
+                <div class="form">
+                    <h2 class="form-auth">Войти в аккаунт</h2>
+                    <p>Это сайт с рецептами для всей семьи /протягивает кальмара в шоколаде/</p>
+                    <form action="{% url 'api/auth/users/login/' %}" method="POST">
+                        <label for="username">Логин</label><br>
+                        <input type="text" id="username" name="username"><br>
+                        <label for="password">Пароль</label><br>
+                        <input type="password" id="password" name="password">
+                        <input type="submit" id="sign-in" class="btn" value="Войти">
+                    </form>
+                    <p style="margin-left: 32%;"><a href="register.html">Нет аккаунта?</a></p>
+                </div>
             </div>
         </div>
-    </div>
     </div>
 
     <script src="js/modules/script.js"></script>
