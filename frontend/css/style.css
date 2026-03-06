@@ -1,1 +1,280 @@
+@font-face {
+    font-family: 'Chiron GoRound TC';
+    src: url('../assets/fonts/ChironGoRoundTC-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
 
+@font-face {
+    font-family: 'Chiron GoRound TC';
+    src: url('../assets/fonts/ChironGoRoundTC-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Shantell Sans';
+    src: url('../assets/fonts/ShantellSans-VariableFont_BNCE,INFM,SPAC,wght.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/*Shantell Sans*/
+:root {
+    --accent: #A43931;
+    --dark-brown: #664B42;
+    --div-color: #F0E6CB;
+    --vanilla: #F4F1DE;
+    --shadow-header: 0 4px 4px #44312b71;
+    --shadow-button: 0 4px 4px #742222;
+    --shadow-div: 0 5px 5px #dbcbb3;
+    --transition: all 0.3s ease;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  html {
+    cursor: url('../assets/images/fork.png'), default;
+  }
+  body {
+    font-size: 24px;
+    font-family: 'Chiron GoRound TC', sans-serif;
+    font-weight: bold;
+    font-optical-sizing: auto;
+    color: var(--dark-brown);
+    line-height: 1.6;
+    background-color: var(--vanilla);
+    background-image: url('https://vk.com/s/v1/doc/DEuYAEXtxVWvpHbsP1x78cNhj5AAVWNpvVSTB10nuyur5zfhRm8');
+    background-repeat: repeat-y;
+    background-position: center top;
+    background-size: 1920px auto;
+    overflow-x: hidden;
+}
+
+  h1, h2, h3, h4 {
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  a {
+    cursor: url('../assets/images/knife.png'), pointer;
+    text-decoration: none;
+    color: inherit;
+    
+  }
+
+  p {
+    font-family: 'Shantell Sans';
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .description {
+    font-size: 16px;
+    font-family: 'Shantell Sans';
+    font-weight: bold;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 15px;
+  }
+
+  .btn {
+    cursor: url('../assets/images/knife.png'), pointer;
+    display: inline-block;
+    background-color: var(--accent);
+    color: var(--vanilla);
+    padding: 12px 30px;
+    border-radius: 30px;
+    transition: var(--transition);
+    border: none;
+    text-align: center;
+    box-shadow: var(--shadow-button);
+  }
+
+  .btn:hover {
+    cursor: url('../assets/images/knife.png'), pointer;
+    background-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .section-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2.5rem;
+    color: var(--dark-color);
+    position: relative;
+    padding-bottom: 15px;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background-color: var(--dark-brown);
+  }
+
+  .section-subtitle {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 1.1rem;
+    color: var(--secondary-color);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  header {
+    color: var(--vanilla);
+    font-size: 20px;
+    background-color: var(--dark-brown);
+    box-shadow: var(--shadow-header);
+    position: sticky;
+    top: 0;
+    z-index: 67;
+    transition: var(--transition);
+  }
+
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+  }
+
+  .logo {
+    height: 70px;
+  }
+
+  .nav-main ul {
+    display: flex;
+    gap: 30px;
+  }
+
+  .nav-main a {
+    font-weight: bold;
+    padding: 5px 0;
+    position: relative;
+    transition: var(--transition);
+  }
+
+  .nav-main ul li{
+    margin-top: 18px;
+    transition: var(--transition);
+  }
+
+  .nav-main ul li:hover{
+    transform: translateY(-2px);
+    transition: var(--transition);
+  }
+
+  .header-icons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .header-icons a {
+    transition: var(--transition);
+  }
+
+  .header-icons a:hover {
+    transform: translateY(-2px);
+    transition: var(--transition);
+  }
+
+  .authorization {
+    margin-top: 70px;
+    padding: 25px;
+    background-color: var(--div-color);
+    border-radius: 50px;
+    width: auto;
+    height: 700px;
+    box-shadow: var(--shadow-div);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 70px;
+  }
+
+  .authorization-block {
+    border-radius: 35px;
+    width: 430px;
+  }
+
+  .form label {
+    font-size: 18px;
+  }
+
+  .form-auth {
+    margin-top: 70px;
+    margin-bottom: 40px;
+  }
+
+  .form-register {
+    margin-top: 30px;
+    margin-bottom: 40px;
+  }
+
+  .form a:hover {
+    color:#664b42b2;
+  }
+
+  .form p {
+    color:#664b4296;
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+
+  #username, #password {
+    font-size: 16px;
+    font-family: 'Chiron GoRound TC';
+    height: 40px;
+    width: 400px;
+    background-color: var(--vanilla);
+    border: 2px solid var(--dark-brown);
+    border-radius: 20px;
+    margin-bottom: 20px;
+    padding: 0 15px;
+  }
+
+  #sign-in {
+    font-size: 18px;
+    font-family: 'Chiron GoRound TC', sans-serif;
+    font-weight: bold;
+    padding: 2px;
+    height: 40px;
+    width: 400px;
+    background-color: var(--accent);
+    border-width: 0;
+    border-radius: 20px;
+    margin-top: 35px;
+    margin-bottom: 25px;
+    transition: none;
+  }
+
+  #sign-in:hover {
+    color: #ece9d6;
+    background-color: #8b2e28;
+    transform: none;
+  }
