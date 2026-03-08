@@ -598,13 +598,13 @@
 
   .onerecipe-editbutton:hover {
     cursor: url('../assets/images/knife.png'), pointer;
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: var(--shadow-header);
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 8px 0 #44312b;
   }
 
   .onerecipe-editbutton:active {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: var(--shadow-header);
+    transform: translateY(0px);
+    box-shadow: 0 2px 0 #44312b;
   }
 
   .onerecipe-deletebutton {
