@@ -443,8 +443,6 @@
       transform: scale(0.9) rotate(-5deg);
   }
 
-  
-
   #addrecipe {
     margin-top: 30px;
     width: 250px;
@@ -578,6 +576,65 @@
     width: auto;
   }
 
+  .onerecipe-buttons {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .onerecipe-editbutton {
+    width: 90%;
+    height: 70px;
+    padding: 0 20px;
+    font-size: 24px;
+    font-family: 'Chiron GoRound TC', sans-serif;
+    border-radius: 35px;
+    transition: var(--transition);
+    background-color: var(--dark-brown);
+    color: var(--vanilla);
+    border: none;
+    box-shadow: var(--shadow-header);
+    cursor: url('../assets/images/knife.png'), pointer;
+  }
+
+  .onerecipe-editbutton:hover {
+    cursor: url('../assets/images/knife.png'), pointer;
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: var(--shadow-header);
+  }
+
+  .onerecipe-editbutton:active {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: var(--shadow-header);
+  }
+
+  .onerecipe-deletebutton {
+    width: 70px;
+    height: 70px;
+    padding: 20px 20px;
+    margin-left: 20px;
+    font-size: 20px;
+    font-family: 'Chiron GoRound TC', sans-serif;
+    border-radius: 35px;
+    transition: var(--transition);
+    background-color: var(--accent);
+    color: var(--vanilla);
+    border: none;
+    box-shadow: var(--shadow-button);
+    cursor: url('../assets/images/knife.png'), pointer;
+  }
+
+  .onerecipe-deletebutton:hover {
+    cursor: url('../assets/images/knife.png'), pointer;
+    background-color: var(--accent);
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 0 #742222;
+  }
+
+  .onerecipe-deletebutton:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #742222;
+  }
+
   .addrecipe {
     font-size: 24px;
     font-weight: bold;
@@ -598,8 +655,8 @@
 }
 
   .addrecipe-element label {
-      display: block;
-      margin-bottom: 10px;
+    display: block;
+    margin-bottom: 10px;
   }
 
   .addrecipe-field, .addrecipe-button {
