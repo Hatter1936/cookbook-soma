@@ -1,10 +1,23 @@
+from unicodedata import category
 from django.views.decorators.csrf import csrf_exempt
+from users.utils import get_user_from_token
 from django.views import View
 from django.http import JsonResponse
 from .models import Recipe, Category, User, Favorite
 import json
 from django.utils.decorators import method_decorator
-from users.utils import get_user_from_token
+import random
+
+def random_recipe(request):
+    recipe_ids = list('id', flat=True)
+
+    if not recipe_ids:
+        return JsonResponse({'error': 'Нет рецептов'}, status=404, json_dumps_params={'ensure_ascii': False})
+
+    random_id = random.choice(recipe_ids)
+
+    recipe_view = RecipeView()
+    return recipe_view.get(request, pk=random_id)
 
 @method_decorator(csrf_exempt, name='dispatch')
 class RecipeView(View):
@@ -28,6 +41,31 @@ class RecipeView(View):
                 return JsonResponse({'error': 'Рецепт не найден'}, status=404, json_dumps_params={'ensure_ascii': False})
         
         recipes = Recipe.objects.all()
+        user = None
+
+        category_id = request.GET.get('category')
+        if category_id:
+            recipes = recipes.filter(category_id=category_id)
+
+        favorite_only = request.GET.get('favorites')
+        if favorite_only and favorite_only.lower() == 'true':
+            user = get_user_from_token(request)
+            if user:
+                recipes = recipes.filter(favorite__user=user)
+            else:
+                return JsonResponse([], safe=False)
+
+        sort_time = request.GET.get('sort_time')
+        if sort_time == 'asc':
+            recipes = recipes.order_by('cooking_time')
+        elif sort_time == 'desc':
+            recipes = recipes.order_by('-cooking_time')
+
+        sort_alpha = request.GET.get('sort_alpha')
+        if sort_alpha == 'asc':
+            recipes = recipes.order_by('title')
+        elif sort_alpha == 'desc':
+            recipes = recipes.order_by('-title')
 
         data = []
         for recipe in recipes: 
@@ -42,7 +80,7 @@ class RecipeView(View):
                 'created_at': recipe.created_at,
             })
 
-        return JsonResponse(data, safe=False, status=404, json_dumps_params={'ensure_ascii': False})
+        return JsonResponse(data, safe=False, json_dumps_params={'ensure_ascii': False})
             
     def post(self, request):
         user = get_user_from_token(request)
