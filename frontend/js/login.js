@@ -33,3 +33,10 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         alert('Ошибка соединения с сервером');
     }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const token = localStorage.getItem('token');
+    if (token) {
+        console.log('Пользователь авторизован');
+    }
+});
