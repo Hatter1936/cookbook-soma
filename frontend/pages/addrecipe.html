@@ -30,24 +30,67 @@
 
     <div class="container">
         <div class="addrecipe">
-            <div class="addrecipe-line">
+            <div class="addrecipe-section">
                 <div class="addrecipe-element">
-                    <label for="ВСТАВИТЬ СЮДА ФОТО">Фото</p>
-                    <input type="text" id="photo">
+                    <label">Фото</label>
+                    <input type="button" class="addrecipe-button" id="photo" value="Выбрать файл...">
                 </div>
             </div>
-            <div class="addrecipe-line">
+            <div class="addrecipe-section">
                 <div class="addrecipe-element">
-                    <label for="ВСТАВИТЬ СЮДА ИМЯ">Название</p>
-                    <input type="text" id="title">
+                    <label">Название</label>
+                    <input type="text" class="addrecipe-field" id="title">
                 </div>
             </div>
-            <div class="addrecipe-line">
+            <div class="addrecipe-section">
                 <div class="addrecipe-element">
-                    <label for="ВСТАВИТЬ СЮДА ОПИС">Описание</p>
-                    <input type="textarea" id="description">
+                    <label">Описание</label>
+                    <textarea id="description" class="addrecipe-field" rows="4" cols="50"></textarea>
                 </div>
             </div>
+            <div class="addrecipe-section">
+                <div class="addrecipe-element">
+                    <label>Категория</label>
+                    <div>
+                        <input type="button" class="addrecipe-button" id="category" value="Выбрать...">
+                    </div>
+                </div>
+                <div class="addrecipe-element">
+                    <label>Стоимость</label>
+                    <div class="addrecipe-element-shortfield">
+                        <input type="textarea" class="addrecipe-field" id="cost">
+                        <p>руб.</p>
+                    </div>
+                </div>
+                <div class="addrecipe-element">
+                    <label>Время приготовления</label>
+                    <div class="addrecipe-element-shortfield">
+                        <input type="textarea" class="addrecipe-field" id="time">
+                        <p>мин.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="addrecipe-section">
+                <div class="addrecipe-element">
+                    <label>Ингредиенты</label>
+                    <div class="addrecipe-element-rowelements">
+                        <input type="text" class="addrecipe-field" id="ingredients">
+                        <input type="text" class="addrecipe-field" id="amount">
+                        <input type="button" class="addrecipe-button" id="spoons" value="шт.">
+                    </div>
+                    <i type="button" class="fa-solid fa-plus" id="addingredient" style="margin-bottom: 30px;"></i>
+                </div>
+            </div>
+            <div class="addrecipe-stepssection">
+                <label>Приготовление</label>
+                <div class="addrecipe-step">
+                    <label>Шаг</label>
+                    <br><input type="button" class="addrecipe-button" id="stepimage" value="Выбрать файл...">
+                    <textarea id="stepdescription" class="addrecipe-field" rows="4" cols="50"></textarea>
+                    <i type="button" class="fa-solid fa-plus" id="addstep" style="margin-bottom: 30px;"></i>
+                </div>
+            </div>
+            <input type="button" class="addrecipe-button" id="addrecipesave" value="Добавить рецепт">
         </div>
     </div>
 

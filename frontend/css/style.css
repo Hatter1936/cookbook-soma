@@ -563,44 +563,141 @@
     align-items: center;
     margin-bottom: 70px;
     border: 3px solid var(--dark-brown);
+    gap: 10px;
+  }
+
+  .addrecipe-section {
+    display: flex;
+    flex-direction: row;
+    gap: 60px;
+    width: 100%; 
+  }
+
+  .addrecipe-stepssection {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%; 
+  }
+
+  .addrecipe-field {
+    height: 60px;
+    width: 850px;
+    color: var(--dark-brown);
+    font-size: 20px;
+    font-family: 'Chiron GoRound TC';
+    border-radius: 30px;
+    margin-bottom: 20px;
+    padding: 0 20px;
+    background-color: var(--vanilla);
+    border: 3px solid var(--dark-brown);
+  }
+
+  .addrecipe-button {
+    height: 60px;
+    width: 850px;
+    color: var(--vanilla);
+    font-size: 20px;
+    font-family: 'Chiron GoRound TC';
+    border-radius: 30px;
+    margin-bottom: 20px;
+    padding: 0 20px;
+    background-color: var(--accent);
+    border: 0;
+    text-align: center;
+    box-shadow: var(--shadow-button);
+  }
+
+  .addrecipe-element-shortfield {
+    display: flex;
+    flex-direction: row;
     gap: 20px;
   }
 
-  .addrecipe-line {
+  .addrecipe-element-shortfield p {
+    font-size: 22px;
+    margin-top: 10px;
+  }
+
+  .addrecipe-element-rowelements {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    gap: 20px;
   }
 
-  #photo {
-    font-size: 16px;
-    font-family: 'Chiron GoRound TC';
-    color: var(--vanilla);
-    height: 50px;
+  #title {
     width: 850px;
+  }
+
+  #description {
+    padding: 10px 20px;
+    height: 200px;
+    width: 850px;
+  }
+
+  #category {
+    width: 250px;
+    box-shadow: none;
+  }
+
+  #cost, #time {
+    width: 150px;
+    
+  }
+
+  #ingredients {
+    width: 600px;
+  }
+
+  #amount {
+    width: 100px;
+  }
+
+  #spoons {
+    width: 100px;
+    box-shadow: none;
+  }
+
+  #addingredient {
+    height: 60px;
+    width: 60px;
     background-color: var(--accent);
-    border: 3px solid var(--dark-brown);
-    border-radius: 25px;
-    margin-bottom: 20px;
-    padding: 0 15px;
+    border-radius: 30px;
+    color: var(--vanilla);
+    text-align: center;
+    line-height: 60px;
+    box-shadow: var(--shadow-button);
   }
 
-  #title, #description {
-    font-size: 16px;
-    font-family: 'Chiron GoRound TC';
-    height: 50px;
+  #addstep {
+    height: 60px;
+    width: 60px;
+    background-color: var(--accent);
+    border-radius: 30px;
+    color: var(--vanilla);
+    text-align: center;
+    line-height: 60px;
+  }
+
+  #stepdescription {
+    padding: 10px 20px;
+    height: 200px;
     width: 850px;
-    background-color: var(--vanilla);
-    border: 3px solid var(--dark-brown);
-    border-radius: 25px;
-    margin-bottom: 20px;
-    padding: 0 15px;
   }
 
-  #photo:focus, #title:focus, #description:focus {
+  #addrecipesave {
+    font-size: 24px;
+    width: 600px;
+    height: 70px;
+    border-radius: 70px;
+  }
+
+  .addrecipe-field:focus {
     outline: none;
     border-color: var(--accent);
     transform: scale(1.02);
-    box-shadow: 0 4px 0 var(--dark-brown);
+    box-shadow: 0 4px 0 #742222;
   }
 
   .form label {
