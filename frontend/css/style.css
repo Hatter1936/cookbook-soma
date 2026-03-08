@@ -548,6 +548,9 @@
   }
 
   .addrecipe {
+    font-size: 24px;
+    font-family: 'Chiron GoRound TC', sans-serif;
+    font-weight: bold;
     margin-top: 70px;
     padding: 40px 50px;
     background-color: var(--div-color);
@@ -557,9 +560,34 @@
     box-shadow: var(--shadow-div);
     display: flex;
     flex-direction: column;
+    align-items: center;
     margin-bottom: 70px;
     border: 3px solid var(--dark-brown);
-    gap: 50px;
+    gap: 20px;
+  }
+
+  .addrecipe-line {
+    display: flex;
+    flex-direction: row;
+  }
+
+  #photo, #title, #description {
+    font-size: 16px;
+    font-family: 'Chiron GoRound TC';
+    height: 50px;
+    width: 850px;
+    background-color: var(--vanilla);
+    border: 3px solid var(--dark-brown);
+    border-radius: 25px;
+    margin-bottom: 20px;
+    padding: 0 15px;
+  }
+
+  #photo:focus, #title:focus, #description:focus {
+    outline: none;
+    border-color: var(--accent);
+    transform: scale(1.02);
+    box-shadow: 0 4px 0 var(--dark-brown);
   }
 
   .form label {
