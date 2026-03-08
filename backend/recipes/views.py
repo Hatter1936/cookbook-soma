@@ -1,9 +1,10 @@
+import re
 from unicodedata import category
 from django.views.decorators.csrf import csrf_exempt
 from users.utils import get_user_from_token
 from django.views import View
 from django.http import JsonResponse
-from .models import Recipe, Category, User, Favorite
+from .models import Ingredient, Recipe, Category, Recipe_ingredients, Recipe_steps, Unit, Favorite
 import json
 from django.utils.decorators import method_decorator
 import random
@@ -83,27 +84,94 @@ class RecipeView(View):
         return JsonResponse(data, safe=False, json_dumps_params={'ensure_ascii': False})
             
     def post(self, request):
+        print("="*50)
+        print("Получен POST запрос на создание рецепта")
+        print(f"Headers: {request.headers}")
+        print(f"User: {request.user}")
+        
+        user = get_user_from_token(request)
+        print(f"User from token: {user}")
+        
+        if not user:
+            return JsonResponse({'error': 'Не авторизован'}, status=401)
+        
+        try:
+            data = json.loads(request.body)
+            print(f"Data: {json.dumps(data, indent=2, ensure_ascii=False)}")
+        except Exception as e:
+            print(f"Ошибка парсинга JSON: {e}")
+            return JsonResponse({'error': 'Неверный формат JSON'}, status=400)
         user = get_user_from_token(request)
         if not user:
             return JsonResponse({'error': 'Не авторизован'}, status=401, json_dumps_params={'ensure_ascii': False})
-        else: 
+        
+        try:
             data = json.loads(request.body)
-            category = Category.objects.get(id=data['category_id'])
-
+            print(f"Получены данные: {data}")
+        
+            if not data.get('title'):
+                return JsonResponse({'error': 'Название обязательно'}, status=400)
+        
+            if not data.get('cooking_time'):
+                return JsonResponse({'error': 'Время приготовления обязательно'}, status=400)
+        
+            if not data.get('category_id'):
+                return JsonResponse({'error': 'Категория обязательна'}, status=400)
+        
+            try:
+                category = Category.objects.get(id=data['category_id'])
+            except Category.DoesNotExist:
+                return JsonResponse({'error': f'Категория с id {data["category_id"]} не найдена'}, status=400)
+        
             recipe = Recipe.objects.create(
-                title = data['title'],
-                description = data.get('description', ''),
-                cooking_time = data['cooking_time'],
-                price = data.get('price'),
-                user = user,
-                category = category,
-                photos = data.get('photos', [])
+                title=data['title'],
+                description=data.get('description', ''),
+                cooking_time=int(data['cooking_time']),
+                price=float(data['price']) if data.get('price') else None,
+                user=user,
+                category=category,
+                photos=data.get('photos', [])
             )
-
+        
+            print(f"Создан рецепт: {recipe.id}")
+            
+            ingredients_data = data.get('ingredients', [])
+            print(f"Ингредиенты: {ingredients_data}")
+            
+            for ing_data in ingredients_data:
+                ingredient, _ = Ingredient.objects.get_or_create(name=ing_data['name'])
+                unit, _ = Unit.objects.get_or_create(name=ing_data['unit'])
+                Recipe_ingredients.objects.create(
+                    recipe=recipe,
+                    ingredient=ingredient,
+                    quantity=float(ing_data['quantity']),
+                    unit=unit
+                )
+            
+            steps_data = data.get('steps', [])
+            print(f"Шаги: {steps_data}")
+            
+            for step_data in steps_data:
+                Recipe_steps.objects.create(
+                    recipe=recipe,
+                    step_number=int(step_data['step_number']),
+                    description=step_data['description']
+                )
+            
             return JsonResponse({
                 'id': recipe.id,
                 'message': 'Рецепт создан'
             }, status=201, json_dumps_params={'ensure_ascii': False})
+            
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Неверный формат JSON'}, status=400)
+        except KeyError as e:
+            return JsonResponse({'error': f'Отсутствует обязательное поле: {str(e)}'}, status=400)
+        except Exception as e:
+            print(f"Ошибка при создании рецепта: {str(e)}")
+            import traceback
+            traceback.print_exc() 
+            return JsonResponse({'error': f'Внутренняя ошибка сервера: {str(e)}'}, status=500)
         
     def delete(self, request, pk=None):
         user = get_user_from_token(request)
@@ -227,3 +295,9 @@ def favorite_list(request):
         })
 
     return JsonResponse(data, safe=False, json_dumps_params={'ensure_ascii': False})
+
+class CategoryView(View):
+    def get(self, request): 
+        categories = Category.objects.all()
+        data = [{'id': cat.id, 'name': cat.name} for cat in categories]
+        return JsonResponse(data, safe=False)
