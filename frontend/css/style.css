@@ -675,7 +675,7 @@
   .addrecipe-button {
     background-color: var(--accent);
     color: var(--vanilla);
-    border: none;
+    border: 3px solid var(--dark-brown);
     box-shadow: var(--shadow-button);
     cursor: url('../assets/images/knife.png'), pointer;
   }
@@ -733,7 +733,7 @@
       width: 60px;
       height: 60px;
       background-color: var(--accent);
-      border: 0 solid var(--dark-brown);
+      border: 3px solid var(--dark-brown);
       border-radius: 50%;
       color: var(--vanilla);
       font-size: 24px;
@@ -835,6 +835,7 @@
     width: 60px;
     background-color: var(--accent);
     border-radius: 30px;
+    border: 3px solid var(--dark-brown);
     color: var(--vanilla);
     text-align: center;
     line-height: 60px;
@@ -846,7 +847,7 @@
     width: 60px;
     background-color: var(--accent);
     border-radius: 30px;
-    border: 0;
+    border: 3px solid var(--dark-brown);
     color: var(--vanilla);
     text-align: center;
     line-height: 60px;
