@@ -13,6 +13,7 @@ venv.bak/
 dist/
 build/
 *.pyc
+*.pot
 
 # Django
 *.log
@@ -33,10 +34,13 @@ db.sqlite3-journal
 .DS_Store
 Thumbs.db
 
+# Database
+*.sql
+*.sqlite
+
 # Environment variables
 .env
 *.env
 
 # Project specific
-# Секретные ключи и пароли
 backend/cookbook/local_settings.py
