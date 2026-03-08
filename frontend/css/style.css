@@ -954,6 +954,38 @@
     margin-bottom: 20px;
   }
 
+  .achievement-done {
+    margin-top: 70px;
+  }
+
+  .achievement-done h3 {
+    margin-left: 10px;
+    margin-bottom: 10px;
+  }
+
+  .achievement-list {
+    padding: 40px 50px;
+    background-color: var(--div-color);
+    border-radius: 50px;
+    width: auto;
+    height: auto;
+    box-shadow: var(--shadow-div);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 70px;
+    border: 3px solid var(--dark-brown);
+    gap: 50px;
+  }
+
+  .achievement-one {
+    height: 175px;
+    width: 175px;
+    border-radius: 100px;
+    background-color: var(--dark-brown);
+    border: 2px solid var(--dark-brown);
+  }
+
   #username, #password {
     font-size: 16px;
     font-family: 'Chiron GoRound TC';
