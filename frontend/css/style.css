@@ -571,7 +571,20 @@
     flex-direction: row;
   }
 
-  #photo, #title, #description {
+  #photo {
+    font-size: 16px;
+    font-family: 'Chiron GoRound TC';
+    color: var(--vanilla);
+    height: 50px;
+    width: 850px;
+    background-color: var(--accent);
+    border: 3px solid var(--dark-brown);
+    border-radius: 25px;
+    margin-bottom: 20px;
+    padding: 0 15px;
+  }
+
+  #title, #description {
     font-size: 16px;
     font-family: 'Chiron GoRound TC';
     height: 50px;
