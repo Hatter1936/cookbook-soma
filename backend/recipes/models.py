@@ -14,7 +14,7 @@ class Recipe(models.Model):
     cooking_time = models.IntegerField()
     price = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True)
     user = models.ForeignKey('users.User', on_delete=models.CASCADE)
-    category = models.ForeignKey('Category', on_delete=models.SET_DEFAULT, default=1, null=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     photos = models.JSONField(default=list, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -25,7 +25,10 @@ class Recipe_steps(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     step_number = models.PositiveIntegerField()
     description = models.TextField(blank=True)
-    photo = models.ImageField(null=True, blank=True)
+    photo = models.ImageField(upload_to='step_photo/', null=True, blank=True, verbose_name="Фото шага")
+
+    def __str__(self):
+        return f"{self.recipe.title} - Шаг {self.step_number}"
 
 class Favorite(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

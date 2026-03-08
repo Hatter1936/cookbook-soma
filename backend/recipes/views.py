@@ -1,7 +1,7 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.views import View
 from django.http import JsonResponse
-from .models import Recipe, Category, User
+from .models import Recipe, Category, User, Favorite
 import json
 from django.utils.decorators import method_decorator
 from users.utils import get_user_from_token
@@ -23,9 +23,9 @@ class RecipeView(View):
                     'photos': recipe.photos,
                     'created_at': recipe.created_at,
                 }
-                return JsonResponse(data)
+                return JsonResponse(data, json_dumps_params={'ensure_ascii': False})
             except Recipe.DoesNotExist: 
-                return JsonResponse({'error': 'Рецепт не найден'}, status=404)
+                return JsonResponse({'error': 'Рецепт не найден'}, status=404, json_dumps_params={'ensure_ascii': False})
         
         recipes = Recipe.objects.all()
 
@@ -42,12 +42,12 @@ class RecipeView(View):
                 'created_at': recipe.created_at,
             })
 
-        return JsonResponse(data, safe=False)
+        return JsonResponse(data, safe=False, status=404, json_dumps_params={'ensure_ascii': False})
             
     def post(self, request):
         user = get_user_from_token(request)
         if not user:
-            return JsonResponse({'error': 'Не авторизован'}, status=401)
+            return JsonResponse({'error': 'Не авторизован'}, status=401, json_dumps_params={'ensure_ascii': False})
         else: 
             data = json.loads(request.body)
             category = Category.objects.get(id=data['category_id'])
@@ -65,36 +65,36 @@ class RecipeView(View):
             return JsonResponse({
                 'id': recipe.id,
                 'message': 'Рецепт создан'
-            }, status=201)
+            }, status=201, json_dumps_params={'ensure_ascii': False})
         
     def delete(self, request, pk=None):
         user = get_user_from_token(request)
         if not user:
-            return JsonResponse({'error': 'Не авторизован'}, status=401)
+            return JsonResponse({'error': 'Не авторизован'}, status=401, json_dumps_params={'ensure_ascii': False})
         
         try:
             recipe = Recipe.objects.get(pk=pk)
         except Recipe.DoesNotExist:
-            return JsonResponse({'error': 'Рецепт не найден'}, status=404)
+            return JsonResponse({'error': 'Рецепт не найден'}, status=404, json_dumps_params={'ensure_ascii': False})
         
         if recipe.user.id != user.id:
-            return JsonResponse({'error': 'Нет прав!'}, status=403)
+            return JsonResponse({'error': 'Нет прав!'}, status=403, json_dumps_params={'ensure_ascii': False})
         
         recipe.delete()
-        return JsonResponse({'message': 'Рецепт удалён'}, status=200)
+        return JsonResponse({'message': 'Рецепт удалён'}, status=200, json_dumps_params={'ensure_ascii': False})
 
     def put(self, request, pk=None):
         user = get_user_from_token(request)
         if not user:
-            return JsonResponse({'error': 'Пользователь не авторизован!'}, status=401)
+            return JsonResponse({'error': 'Пользователь не авторизован!'}, status=401, json_dumps_params={'ensure_ascii': False})
         
         try:
             recipe = Recipe.objects.get(pk=pk)
         except Recipe.DoesNotExist:
-            return JsonResponse({'error': 'Рецепт не найден'}, status=404)
+            return JsonResponse({'error': 'Рецепт не найден'}, status=404, json_dumps_params={'ensure_ascii': False})
         
         if recipe.user.id != user.id:
-            return JsonResponse({'error': 'Нет прав!'}, status=403)
+            return JsonResponse({'error': 'Нет прав!'}, status=403, json_dumps_params={'ensure_ascii': False})
         
         data = json.loads(request.body)
         try: 
@@ -113,7 +113,7 @@ class RecipeView(View):
 
             recipe.save()
         except Category.DoesNotExist:
-            return JsonResponse({'error': 'Такой категории не сущесвтует!'}, status=400)
+            return JsonResponse({'error': 'Такой категории не существует!'}, status=400, json_dumps_params={'ensure_ascii': False})
 
         return JsonResponse({
             'id': recipe.id,
@@ -125,3 +125,67 @@ class RecipeView(View):
             'photos': recipe.photos,
             'created_at': recipe.created_at,
         })
+    
+@csrf_exempt
+def toggle_favorite(request, recipe_id):
+    if request.method == 'POST':
+        user = get_user_from_token(request)
+        if not user:
+            return JsonResponse({'error': 'Не авторизован!'}, status=401, json_dumps_params={'ensure_ascii': False})
+        
+        try:
+            recipe = Recipe.objects.get(id=recipe_id)
+        except Recipe.DoesNotExist:
+            return JsonResponse({'error': 'Рецепт не найден!'}, status=404, json_dumps_params={'ensure_ascii': False})
+        
+        favorite, created = Favorite.objects.get_or_create(
+            user=user,
+            recipe=recipe
+        )
+
+        if created:
+            return JsonResponse({'message': 'Добавлено в избранное!'}, status=201, json_dumps_params={'ensure_ascii': False})
+        else:
+            favorite.delete()
+            return JsonResponse({'message': 'Удалено из избранного!'}, status=200, json_dumps_params={'ensure_ascii': False})
+        
+    elif request.method == 'DELETE':
+        user = get_user_from_token(request)
+        if not user:
+            return JsonResponse({'error': 'Не авторизован!'}, status=401, json_dumps_params={'ensure_ascii': False})
+        
+        deleted = Favorite.objects.filter(
+            user=user,
+            recipe_id=recipe_id
+        ).delete()
+
+        if deleted[0] > 0:
+            return JsonResponse({'message': 'Удалено из избранного'}, status=200, json_dumps_params={'ensure_ascii': False})
+        else:
+            return JsonResponse({'error': 'Не найдено в избранном!'}, status=404, json_dumps_params={'ensure_ascii': False})
+
+def favorite_list(request):
+    user = get_user_from_token(request)
+    if not user:
+        return JsonResponse({'error': 'Пользователь не авторизован!'}, status=401, json_dumps_params={'ensure_ascii': False})
+    
+    favorites = Favorite.objects.filter(user=user).select_related('recipe')
+
+    data = []
+    for fav in favorites:
+        recipe = fav.recipe
+        data.append({
+            'id': fav.id,
+            'recipe': {
+                'id': recipe.id,
+                'title': recipe.title,
+                'description': recipe.description,
+                'cooking_time': recipe.cooking_time,
+                'price': str(recipe.price) if recipe.price else None,
+                'category': recipe.category.name if recipe.category else None,
+                'photos': recipe.photos,
+            },
+            'created_at': fav.created_at
+        })
+
+    return JsonResponse(data, safe=False, json_dumps_params={'ensure_ascii': False})

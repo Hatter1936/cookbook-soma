@@ -5,7 +5,8 @@ urlpatterns = [
     #Работа с рецептами
     path('', views.RecipeView.as_view()),
     path('<int:pk>/', views.RecipeView.as_view()),
+    #Рандомный рецепт от Сомы 😎 потом
     #Работа с избранным
     path('favorites/', views.favorite_list, name='favorite_list'),
-    path('favorites/<int:recipe_pk>/', views.toggle_favorite, name='toggle_favorite'),
+    path('favorites/<int:recipe_id>/', views.toggle_favorite, name='toggle_favorite'),
 ]
