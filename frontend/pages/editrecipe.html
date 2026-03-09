@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Рецепты бойца Сомы</title>
+    <title>Рецепты бойца Сомы - Редактировать рецепт</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -13,11 +13,10 @@
             <div class="header-top">
                 <nav class="nav-main">
                     <ul>
-                        <img src="https://img.freepik.com/premium-photo/powerful-explosion-with-fire-transparent-background_888418-26837.jpg" class="logo"></img>
+                        <img src="https://img.freepik.com/premium-photo/powerful-explosion-with-fire-transparent-background_888418-26837.jpg" class="logo" alt="Логотип">
                         <li><a href="index.html">Мои рецепты</a></li>
                         <li><a href="achievements.html">Мои достижения</a></li>
-                        <li><a href="">Мне повезёт</a></li>
-                    
+                        <li><a href="#">Мне повезёт</a></li>
                     </ul>
                 </nav>
                 <div class="header-icons">
@@ -28,10 +27,87 @@
         </div>
     </header>
 
-    <div class="container">
-        <h4>Салат из салата с салатом</h4>
-        <p class="description">Описание рецептаааааа</p>
-    </div>
+    <main class="container">
+        <form class="addrecipe" id="editRecipeForm">
+            <input type="hidden" id="recipeId" value="">
 
+            <div class="addrecipe-section">
+                <div class="addrecipe-element">
+                    <label for="editphoto">Фото</label>
+                    <div class="file-input-wrapper">
+                        <input type="file" id="editphoto" accept="image/*">
+                        <div class="file-input-button">Выбрать файл...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="addrecipe-section">
+                <div class="addrecipe-element">
+                    <label for="edittitle">Название</label>
+                    <input type="text" class="addrecipe-field" id="edittitle" required>
+                </div>
+            </div>
+
+            <div class="addrecipe-section">
+                <div class="addrecipe-element">
+                    <label for="editdescription">Описание</label>
+                    <textarea id="editdescription" class="addrecipe-field" rows="4" required></textarea>
+                </div>
+            </div>
+
+            <div class="addrecipe-section">
+                <div class="addrecipe-element">
+                    <label for="editcategory">Категория</label>
+                    <select id="editcategory" class="addrecipe-button" required>
+                        <option value="no_category">Без категории</option>
+                        <option value="breakfast">Завтрак</option>
+                        <option value="lunch">Обед</option>
+                        <option value="dinner">Ужин</option>
+                        <option value="dessert">Десерт</option>
+                    </select>
+                </div>
+
+                <div class="addrecipe-element">
+                    <label for="editcost">Стоимость</label>
+                    <div class="addrecipe-element-shortfield">
+                        <input type="text" class="addrecipe-field" id="editcost" pattern="\d*" inputmode="numeric" placeholder="0" required>
+                        <span>руб.</span>
+                    </div>
+                </div>
+
+                <div class="addrecipe-element">
+                    <label for="edittime">Время приготовления</label>
+                    <div class="addrecipe-element-shortfield">
+                        <input type="text" class="addrecipe-field" id="edittime" pattern="\d*" inputmode="numeric" placeholder="0" required>
+                        <span>мин.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="addrecipe-section">
+                <div class="addrecipe-element">
+                    <label>Ингредиенты</label>
+                    <div id="editingredients-container">
+                    </div>
+                    <button type="button" class="add-icon" id="editaddingredient" aria-label="Добавить ингредиент">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="addrecipe-stepssection">
+                <label>Приготовление</label>
+                <div id="editsteps-container">
+                </div>
+                <button type="button" class="add-icon" id="editaddstep" aria-label="Добавить шаг">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+            </div>
+
+            <button type="submit" class="addrecipe-button" id="editrecipesave">Сохранить изменения</button>
+        </form>
+    </main>
+
+    <script src="../js/editrecipe.js"></script>
 </body>
 </html>

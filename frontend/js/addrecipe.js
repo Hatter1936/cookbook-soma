@@ -1,5 +1,3 @@
-// frontend/js/addrecipe.js
-
 document.addEventListener('DOMContentLoaded', function() {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -7,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-    // Загружаем категории с сервера
     loadCategories();
     
     initIngredientHandlers();
@@ -16,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('recipeForm').addEventListener('submit', handleSubmit);
 });
 
-// Функция загрузки категорий из БД
 async function loadCategories() {
     try {
         const token = localStorage.getItem('token');
@@ -33,7 +29,6 @@ async function loadCategories() {
         const categories = await response.json();
         console.log('Загруженные категории:', categories);
         
-        // Заполняем select категориями
         const categorySelect = document.getElementById('category');
         categorySelect.innerHTML = '<option value="">Выберите категорию</option>';
         
@@ -46,12 +41,10 @@ async function loadCategories() {
         
     } catch (error) {
         console.error('Ошибка загрузки категорий:', error);
-        // Если не удалось загрузить, показываем статические для тестирования
         showStaticCategories();
     }
 }
 
-// Временная функция для тестирования (пока бэкенд не готов)
 function showStaticCategories() {
     console.log('Используем статические категории');
     const categorySelect = document.getElementById('category');
@@ -69,7 +62,6 @@ function initIngredientHandlers() {
     const ingredientsContainer = document.getElementById('ingredients-container');
     const addIngredientBtn = document.getElementById('addingredient');
     
-    // Если нет ни одной строки, добавляем первую
     if (ingredientsContainer.children.length === 0) {
         addIngredientRow();
     }
@@ -108,7 +100,6 @@ function initStepHandlers() {
     const stepsContainer = document.getElementById('steps-container');
     const addStepBtn = document.getElementById('addstep');
     
-    // Если нет ни одного шага, добавляем первый
     if (stepsContainer.children.length === 0) {
         addStepRow();
     }
@@ -216,7 +207,6 @@ async function handleSubmit(e) {
     const token = localStorage.getItem('token');
     
     try {
-        // Собираем данные строго по ТЗ
         const recipeData = {
             title: document.getElementById('title').value.trim(),
             description: document.getElementById('description').value.trim() || '',
@@ -226,13 +216,11 @@ async function handleSubmit(e) {
             steps: []
         };
         
-        // Добавляем стоимость, если указана (по ТЗ необязательно)
         const cost = document.getElementById('cost').value.trim();
         if (cost) {
             recipeData.price = parseFloat(cost);
         }
         
-        // Собираем ингредиенты
         document.querySelectorAll('.ingredient-row').forEach(row => {
             const name = row.querySelector('.ingredient-name')?.value.trim();
             const amount = parseFloat(row.querySelector('.ingredient-amount')?.value);
@@ -247,7 +235,6 @@ async function handleSubmit(e) {
             }
         });
         
-        // Собираем шаги
         document.querySelectorAll('.step-row').forEach((row, index) => {
             const description = row.querySelector('.step-description')?.value.trim();
             if (description) {
@@ -269,7 +256,6 @@ async function handleSubmit(e) {
             body: JSON.stringify(recipeData)
         });
         
-        // Проверяем тип ответа
         const contentType = response.headers.get('content-type');
         
         let data;

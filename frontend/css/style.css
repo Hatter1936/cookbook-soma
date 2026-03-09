@@ -443,8 +443,6 @@
       transform: scale(0.9) rotate(-5deg);
   }
 
-  
-
   #addrecipe {
     margin-top: 30px;
     width: 250px;
@@ -578,6 +576,65 @@
     width: auto;
   }
 
+  .onerecipe-buttons {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .onerecipe-editbutton {
+    width: 90%;
+    height: 70px;
+    padding: 0 20px;
+    font-size: 24px;
+    font-family: 'Chiron GoRound TC', sans-serif;
+    border-radius: 35px;
+    transition: var(--transition);
+    background-color: var(--dark-brown);
+    color: var(--vanilla);
+    border: none;
+    box-shadow: var(--shadow-header);
+    cursor: url('../assets/images/knife.png'), pointer;
+  }
+
+  .onerecipe-editbutton:hover {
+    cursor: url('../assets/images/knife.png'), pointer;
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 8px 0 #44312b;
+  }
+
+  .onerecipe-editbutton:active {
+    transform: translateY(0px);
+    box-shadow: 0 2px 0 #44312b;
+  }
+
+  .onerecipe-deletebutton {
+    width: 70px;
+    height: 70px;
+    padding: 20px 20px;
+    margin-left: 20px;
+    font-size: 20px;
+    font-family: 'Chiron GoRound TC', sans-serif;
+    border-radius: 35px;
+    transition: var(--transition);
+    background-color: var(--accent);
+    color: var(--vanilla);
+    border: none;
+    box-shadow: var(--shadow-button);
+    cursor: url('../assets/images/knife.png'), pointer;
+  }
+
+  .onerecipe-deletebutton:hover {
+    cursor: url('../assets/images/knife.png'), pointer;
+    background-color: var(--accent);
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 0 #742222;
+  }
+
+  .onerecipe-deletebutton:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #742222;
+  }
+
   .addrecipe {
     font-size: 24px;
     font-weight: bold;
@@ -598,8 +655,8 @@
 }
 
   .addrecipe-element label {
-      display: block;
-      margin-bottom: 10px;
+    display: block;
+    margin-bottom: 10px;
   }
 
   .addrecipe-field, .addrecipe-button {
@@ -618,7 +675,7 @@
   .addrecipe-button {
     background-color: var(--accent);
     color: var(--vanilla);
-    border: none;
+    border: 3px solid var(--dark-brown);
     box-shadow: var(--shadow-button);
     cursor: url('../assets/images/knife.png'), pointer;
   }
@@ -676,7 +733,7 @@
       width: 60px;
       height: 60px;
       background-color: var(--accent);
-      border: 0 solid var(--dark-brown);
+      border: 3px solid var(--dark-brown);
       border-radius: 50%;
       color: var(--vanilla);
       font-size: 24px;
@@ -778,6 +835,7 @@
     width: 60px;
     background-color: var(--accent);
     border-radius: 30px;
+    border: 3px solid var(--dark-brown);
     color: var(--vanilla);
     text-align: center;
     line-height: 60px;
@@ -789,7 +847,7 @@
     width: 60px;
     background-color: var(--accent);
     border-radius: 30px;
-    border: 0;
+    border: 3px solid var(--dark-brown);
     color: var(--vanilla);
     text-align: center;
     line-height: 60px;
@@ -895,6 +953,38 @@
     color:#664b4296;
     font-size: 18px;
     margin-bottom: 20px;
+  }
+
+  .achievement-done {
+    margin-top: 70px;
+  }
+
+  .achievement-done h3 {
+    margin-left: 10px;
+    margin-bottom: 10px;
+  }
+
+  .achievement-list {
+    padding: 40px 50px;
+    background-color: var(--div-color);
+    border-radius: 50px;
+    width: auto;
+    height: auto;
+    box-shadow: var(--shadow-div);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 70px;
+    border: 3px solid var(--dark-brown);
+    gap: 50px;
+  }
+
+  .achievement-one {
+    height: 175px;
+    width: 175px;
+    border-radius: 100px;
+    background-color: var(--dark-brown);
+    border: 2px solid var(--dark-brown);
   }
 
   #username, #password {
