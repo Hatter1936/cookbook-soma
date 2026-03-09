@@ -27,11 +27,61 @@
             </div>
         </div>
     </header>
-
+    
     <div class="container">
         <a href="addrecipe.html"><input type="submit" id="addrecipe" class="btn" value="Добавить рецепт"></a>
         <div class="filter">
-            <choice>Фильтр =</choice>
+            <div class="container">
+            <a href="addrecipe.html"><input type="submit" id="addrecipe" class="btn" value="Добавить рецепт"></a>
+                <div class="filters-section">
+                    <h3>Фильтры и сортировка</h3>
+                    
+                    <div class="filter-row">
+                        <label for="filterCategory">Категория:</label>
+                        <select id="filterCategory" class="filter-select">
+                            <option value="">Все категории</option>
+                            <option value="1">Закуска</option>
+                            <option value="2">Горячее</option>
+                            <option value="3">Холодное</option>
+                            <option value="4">Салат</option>
+                            <option value="5">Десерт</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-row">
+                        <label for="sortTime">Время приготовления:</label>
+                        <select id="sortTime" class="filter-select">
+                            <option value="">Без сортировки</option>
+                            <option value="asc">Меньше по времени</option>
+                            <option value="desc">Больше по времени</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-row">
+                        <label for="sortAlpha">По алфавиту:</label>
+                        <select id="sortAlpha" class="filter-select">
+                            <option value="">Без сортировки</option>
+                            <option value="asc">А-Я</option>
+                            <option value="desc">Я-А</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-row checkbox-row">
+                        <label>
+                            <input type="checkbox" id="favoritesOnly">
+                            Только избранное
+                        </label>
+                    </div>
+                    
+                    <div class="filter-buttons">
+                        <button id="applyFilters" class="btn">Применить фильтры</button>
+                        <button id="resetFilters" class="btn btn-secondary">Сбросить</button>
+                    </div>
+                </div>
+                
+                <div class="recipes">
+                </div>
+            </div>
             <choice>Сортировать по...</choice>
         </div>
         <div class="recipes">
@@ -92,5 +142,8 @@
         </div>
     </div>
     
+<script src="../js/auth.js"></script>
+<script src="../js/index.js"></script>
+
 </body>
 </html>

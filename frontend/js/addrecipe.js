@@ -207,82 +207,86 @@ async function handleSubmit(e) {
     const token = localStorage.getItem('token');
     
     try {
-        const recipeData = {
-            title: document.getElementById('title').value.trim(),
-            description: document.getElementById('description').value.trim() || '',
-            cooking_time: parseInt(document.getElementById('time').value),
-            category_id: parseInt(document.getElementById('category').value),
-            ingredients: [],
-            steps: []
-        };
+        const formData = new FormData();
+        
+        formData.append('title', document.getElementById('title').value.trim());
+        formData.append('description', document.getElementById('description').value.trim() || '');
+        formData.append('cooking_time', parseInt(document.getElementById('time').value));
+        formData.append('category_id', parseInt(document.getElementById('category').value));
         
         const cost = document.getElementById('cost').value.trim();
         if (cost) {
-            recipeData.price = parseFloat(cost);
+            formData.append('price', parseFloat(cost));
         }
         
+        const mainPhoto = document.getElementById('photo').files[0];
+        if (mainPhoto) {
+            formData.append('main_photo', mainPhoto);
+        }
+        
+        const ingredients = [];
         document.querySelectorAll('.ingredient-row').forEach(row => {
             const name = row.querySelector('.ingredient-name')?.value.trim();
             const amount = parseFloat(row.querySelector('.ingredient-amount')?.value);
             const unit = row.querySelector('.ingredient-unit')?.value;
             
             if (name && !isNaN(amount) && unit) {
-                recipeData.ingredients.push({
+                ingredients.push({
                     name: name,
                     quantity: amount,
                     unit: unit
                 });
             }
         });
+        formData.append('ingredients', JSON.stringify(ingredients));
         
-        document.querySelectorAll('.step-row').forEach((row, index) => {
+        const steps = [];
+        const stepRows = document.querySelectorAll('.step-row');
+        
+        for (let i = 0; i < stepRows.length; i++) {
+            const row = stepRows[i];
             const description = row.querySelector('.step-description')?.value.trim();
+            const stepImage = row.querySelector('.step-image')?.files[0];
+            
             if (description) {
-                recipeData.steps.push({
-                    step_number: index + 1,
+                steps.push({
+                    step_number: i + 1,
                     description: description
                 });
+                
+                if (stepImage) {
+                    formData.append(`step_photo_${i + 1}`, stepImage);
+                }
             }
-        });
+        }
+        formData.append('steps', JSON.stringify(steps));
         
-        console.log('Отправляемые данные:', JSON.stringify(recipeData, null, 2));
+        console.log('Отправка FormData...');
         
         const response = await fetch('http://localhost:8000/api/recipes/', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
+                'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify(recipeData)
+            body: formData
         });
         
         const contentType = response.headers.get('content-type');
-        
         let data;
+        
         if (contentType && contentType.includes('application/json')) {
             data = await response.json();
         } else {
             const text = await response.text();
             console.error('Сервер вернул не JSON:', text.substring(0, 200));
-            throw new Error('Сервер вернул ошибку. Проверьте консоль Django.');
+            throw new Error('Сервер вернул ошибку');
         }
         
         if (response.ok) {
             alert('Рецепт успешно добавлен!');
             window.location.href = 'index.html';
         } else {
-            let errorMessage = 'Ошибка при добавлении рецепта';
-            
-            if (data.error) {
-                errorMessage = data.error;
-            } else if (data.detail) {
-                errorMessage = data.detail;
-            } else if (data.message) {
-                errorMessage = data.message;
-            }
-            
-            alert('Ошибка: ' + errorMessage);
-            console.error('Детали ошибки:', data);
+            alert('Ошибка: ' + (data.error || data.message || 'Неизвестная ошибка'));
         }
     } catch (error) {
         console.error('Ошибка:', error);

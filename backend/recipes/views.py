@@ -1,21 +1,29 @@
-import re
-from unicodedata import category
+import json
+import random
 from django.views.decorators.csrf import csrf_exempt
-from users.utils import get_user_from_token
 from django.views import View
 from django.http import JsonResponse
-from .models import Ingredient, Recipe, Category, Recipe_ingredients, Recipe_steps, Unit, Favorite
-import json
 from django.utils.decorators import method_decorator
-import random
+from django.db.models import Q
+
+from achievements.utils import check_achievements
+from achievements.models import Achievement, UserAchievement
+from users.utils import get_user_from_token
+from .models import Ingredient, Recipe, Category, Recipe_ingredients, Recipe_steps, Unit, Favorite
 
 def random_recipe(request):
-    recipe_ids = list('id', flat=True)
+    recipe_ids = list(Recipe.objects.values_list('id', flat=True))
 
     if not recipe_ids:
         return JsonResponse({'error': 'Нет рецептов'}, status=404, json_dumps_params={'ensure_ascii': False})
 
     random_id = random.choice(recipe_ids)
+
+    user = get_user_from_token(request)
+    if user:
+        ach = Achievement.objects.filter(condition='random_clicked').first()
+        if ach and not UserAchievement.objects.filter(user=user, achievement=ach).exists():
+            UserAchievement.objects.create(user=user, achievement=ach)
 
     recipe_view = RecipeView()
     return recipe_view.get(request, pk=random_id)
@@ -27,6 +35,30 @@ class RecipeView(View):
         if pk:
             try:
                 recipe = Recipe.objects.get(pk=pk)
+
+                recipe_ingredients = Recipe_ingredients.objects.filter(recipe=recipe).select_related('ingredient', 'unit')
+                ingredients = []
+                for ri in recipe_ingredients:
+                    ingredients.append({
+                        'name': ri.ingredient.name,
+                        'quantity': float(ri.quantity),
+                        'unit': ri.unit.name
+                    })
+                
+                steps = Recipe_steps.objects.filter(recipe=recipe).order_by('step_number')
+                steps_data = []
+                for step in steps:
+                    steps_data.append({
+                        'step_number': step.step_number,
+                        'description': step.description,
+                        'photo': step.photo.url if step.photo else None
+                    })
+                
+                user = get_user_from_token(request)
+                is_favorite = False
+                if user:
+                    is_favorite = Favorite.objects.filter(user=user, recipe=recipe).exists()
+
                 data = {
                     'id': recipe.id,
                     'title': recipe.title,
@@ -34,27 +66,33 @@ class RecipeView(View):
                     'cooking_time': recipe.cooking_time,
                     'price': str(recipe.price) if recipe.price else None,
                     'category': recipe.category.name if recipe.category else None,
+                    'category_id': recipe.category.id if recipe.category else None,
                     'photos': recipe.photos,
+                    'ingredients': ingredients,
+                    'steps': steps_data,
+                    'is_favorite': is_favorite,
+                    'user_id': recipe.user.id if recipe.user else None,
+                    'user_name': recipe.user.username if recipe.user else None,
                     'created_at': recipe.created_at,
                 }
                 return JsonResponse(data, json_dumps_params={'ensure_ascii': False})
             except Recipe.DoesNotExist: 
                 return JsonResponse({'error': 'Рецепт не найден'}, status=404, json_dumps_params={'ensure_ascii': False})
         
-        recipes = Recipe.objects.all()
-        user = None
+        user = get_user_from_token(request)
+        
+        if user:
+            recipes = Recipe.objects.filter(Q(user=user) | Q(user__isnull=True))
+        else:
+            recipes = Recipe.objects.filter(user__isnull=True)
 
         category_id = request.GET.get('category')
         if category_id:
             recipes = recipes.filter(category_id=category_id)
 
         favorite_only = request.GET.get('favorites')
-        if favorite_only and favorite_only.lower() == 'true':
-            user = get_user_from_token(request)
-            if user:
-                recipes = recipes.filter(favorite__user=user)
-            else:
-                return JsonResponse([], safe=False)
+        if favorite_only and favorite_only.lower() == 'true' and user:
+            recipes = recipes.filter(favorite__user=user)
 
         sort_time = request.GET.get('sort_time')
         if sort_time == 'asc':
@@ -69,7 +107,11 @@ class RecipeView(View):
             recipes = recipes.order_by('-title')
 
         data = []
-        for recipe in recipes: 
+        for recipe in recipes:
+            is_favorite = False
+            if user:
+                is_favorite = Favorite.objects.filter(user=user, recipe=recipe).exists()
+            
             data.append({
                 'id': recipe.id,
                 'title': recipe.title,
@@ -78,6 +120,8 @@ class RecipeView(View):
                 'price': str(recipe.price) if recipe.price else None,
                 'category': recipe.category.name if recipe.category else None,
                 'photos': recipe.photos,
+                'is_favorite': is_favorite,
+                'is_owner': user and recipe.user and recipe.user.id == user.id,
                 'created_at': recipe.created_at,
             })
 
@@ -86,8 +130,6 @@ class RecipeView(View):
     def post(self, request):
         print("="*50)
         print("Получен POST запрос на создание рецепта")
-        print(f"Headers: {request.headers}")
-        print(f"User: {request.user}")
         
         user = get_user_from_token(request)
         print(f"User from token: {user}")
@@ -96,17 +138,27 @@ class RecipeView(View):
             return JsonResponse({'error': 'Не авторизован'}, status=401)
         
         try:
-            data = json.loads(request.body)
-            print(f"Data: {json.dumps(data, indent=2, ensure_ascii=False)}")
-        except Exception as e:
-            print(f"Ошибка парсинга JSON: {e}")
-            return JsonResponse({'error': 'Неверный формат JSON'}, status=400)
-        user = get_user_from_token(request)
-        if not user:
-            return JsonResponse({'error': 'Не авторизован'}, status=401, json_dumps_params={'ensure_ascii': False})
-        
-        try:
-            data = json.loads(request.body)
+            if request.content_type and 'multipart/form-data' in request.content_type:
+                data = {
+                    'title': request.POST.get('title'),
+                    'description': request.POST.get('description', ''),
+                    'cooking_time': request.POST.get('cooking_time'),
+                    'category_id': request.POST.get('category_id'),
+                    'price': request.POST.get('price'),
+                    'ingredients': json.loads(request.POST.get('ingredients', '[]')),
+                    'steps': json.loads(request.POST.get('steps', '[]')),
+                    'photos': []
+                }
+                
+                if 'main_photo' in request.FILES:
+                    data['photos'] = ['/media/uploaded_photo.jpg']
+                    
+                for key, file in request.FILES.items():
+                    if key.startswith('step_photo_'):
+                        print(f"Получено фото шага: {key}")
+            else:
+                data = json.loads(request.body)
+            
             print(f"Получены данные: {data}")
         
             if not data.get('title'):
@@ -158,6 +210,12 @@ class RecipeView(View):
                     description=step_data['description']
                 )
             
+            try:
+                from achievements.utils import check_achievements
+                check_achievements(user)
+            except Exception as e:
+                print(f"Ошибка при проверке достижений: {e}")
+            
             return JsonResponse({
                 'id': recipe.id,
                 'message': 'Рецепт создан'
@@ -183,10 +241,15 @@ class RecipeView(View):
         except Recipe.DoesNotExist:
             return JsonResponse({'error': 'Рецепт не найден'}, status=404, json_dumps_params={'ensure_ascii': False})
         
-        if recipe.user.id != user.id:
+        if recipe.user and recipe.user.id != user.id:
             return JsonResponse({'error': 'Нет прав!'}, status=403, json_dumps_params={'ensure_ascii': False})
         
         recipe.delete()
+        
+        ach = Achievement.objects.filter(condition='recipe_deleted').first()
+        if ach and not UserAchievement.objects.filter(user=user, achievement=ach).exists():
+            UserAchievement.objects.create(user=user, achievement=ach)
+        
         return JsonResponse({'message': 'Рецепт удалён'}, status=200, json_dumps_params={'ensure_ascii': False})
 
     def put(self, request, pk=None):
@@ -199,7 +262,7 @@ class RecipeView(View):
         except Recipe.DoesNotExist:
             return JsonResponse({'error': 'Рецепт не найден'}, status=404, json_dumps_params={'ensure_ascii': False})
         
-        if recipe.user.id != user.id:
+        if recipe.user and recipe.user.id != user.id:
             return JsonResponse({'error': 'Нет прав!'}, status=403, json_dumps_params={'ensure_ascii': False})
         
         data = json.loads(request.body)
@@ -250,6 +313,18 @@ def toggle_favorite(request, recipe_id):
         )
 
         if created:
+            # Проверяем достижения только один раз
+            ach = Achievement.objects.filter(condition='recipe_favorited').first()
+            if ach and not UserAchievement.objects.filter(user=user, achievement=ach).exists():
+                UserAchievement.objects.create(user=user, achievement=ach)
+            
+            # Вызываем check_achievements один раз
+            try:
+                from achievements.utils import check_achievements
+                check_achievements(user)
+            except Exception as e:
+                print(f"Ошибка при проверке достижений: {e}")
+                
             return JsonResponse({'message': 'Добавлено в избранное!'}, status=201, json_dumps_params={'ensure_ascii': False})
         else:
             favorite.delete()
