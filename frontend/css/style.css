@@ -987,7 +987,7 @@
     border: 2px solid var(--dark-brown);
   }
 
-  #username, #password {
+  #username, #password, #confirm_password {
     font-size: 16px;
     font-family: 'Chiron GoRound TC';
     height: 40px;
@@ -999,7 +999,7 @@
     padding: 0 15px;
   }
 
-  #username:focus, #password:focus {
+  #username:focus, #password:focus, #confirm_password:focus {
     outline: none;
     border-color: var(--accent);
     transform: scale(1.02);
