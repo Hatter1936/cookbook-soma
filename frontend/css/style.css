@@ -1132,6 +1132,45 @@
       width: 175px;
   }
 
+  .loading {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+      font-style: italic;
+  }
+
+  .error {
+      text-align: center;
+      padding: 20px;
+      color: #d32f2f;
+      background: #ffebee;
+      border-radius: 8px;
+  }
+
+  .no-achievements {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+      background: #f5f5f5;
+      border-radius: 8px;
+  }
+
+  .achievement-condition {
+      display: block;
+      font-size: 0.9em;
+      color: #666;
+      margin-top: 5px;
+  }
+
+  .achievement-hover-info.not-achieved {
+      opacity: 0.8;
+  }
+
+  .achievement-hover-info.not-achieved .achievement-condition {
+      color: #f57c00;
+      font-weight: bold;
+  }
+
   #username, #password, #confirm_password {
     font-size: 16px;
     font-family: 'Chiron GoRound TC';
