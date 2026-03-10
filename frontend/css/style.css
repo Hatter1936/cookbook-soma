@@ -1064,6 +1064,16 @@
     background-size: cover;
   }
 
+  .achievement-one:hover {
+    position: static;
+    font-size: 26px;
+    height: 300px;
+    width: 284px;
+    display: flex;
+    text-align: center;
+    padding: 10px;
+  }
+
   #username, #password, #confirm_password {
     font-size: 16px;
     font-family: 'Chiron GoRound TC';
