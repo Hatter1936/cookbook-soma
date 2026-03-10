@@ -92,7 +92,7 @@ function updateNavigation() {
         if (token) {
             headerIcons.innerHTML = `
                 <span class="username">${localStorage.getItem('username') || 'Пользователь'}</span>
-                <button onclick="logout()" class="btn logout-btn">Выйти</button>
+                <button onclick="logout()" class="btn" style="font-family: 'Chiron GoRound TC'; font-size: 18px;">Выйти</button>
             `;
         } else {
             headerIcons.innerHTML = `

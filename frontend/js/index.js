@@ -264,22 +264,6 @@ function showErrorMessage(message) {
     }
 }
 
-async function getRandomRecipe() {
-    try {
-        const response = await fetch('http://localhost:8000/api/recipes/random/');
-        
-        if (!response.ok) {
-            throw new Error('Не удалось получить случайный рецепт');
-        }
-        
-        const recipe = await response.json();
-        window.location.href = `recipe.html?id=${recipe.id}`;
-    } catch (error) {
-        console.error('Ошибка:', error);
-        alert('Не удалось получить случайный рецепт');
-    }
-}
-
 async function toggleFavorite(recipeId, event) {
     event.preventDefault();
     event.stopPropagation();
@@ -328,32 +312,3 @@ async function toggleFavorite(recipeId, event) {
 }
 
 window.toggleFavorite = toggleFavorite;
-
-function updateNavigation() {
-    const token = localStorage.getItem('token');
-    const headerIcons = document.querySelector('.header-icons');
-    
-    if (headerIcons) {
-        if (token) {
-            headerIcons.innerHTML = `
-                <a href="profile.html" class="slowhover">Профиль</a>
-                <a href="#" id="logoutBtn" class="btn">Выйти</a>
-            `;
-            
-            const logoutBtn = document.getElementById('logoutBtn');
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('username');
-                    window.location.href = 'index.html';
-                });
-            }
-        } else {
-            headerIcons.innerHTML = `
-                <a href="login.html" class="slowhover">Вход</a>
-                <a href="register.html" class="btn">Регистрация</a>
-            `;
-        }
-    }
-}

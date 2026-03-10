@@ -30,7 +30,7 @@ async function loadCategories() {
         console.log('Загруженные категории:', categories);
         
         const categorySelect = document.getElementById('category');
-        categorySelect.innerHTML = '<option value="">Выберите категорию</option>';
+        categorySelect.innerHTML = '<option value="">Без категории</option>';
         
         categories.forEach(cat => {
             const option = document.createElement('option');
@@ -157,7 +157,7 @@ function validateForm() {
     }
     
     if (!category) {
-        alert('Выберите категорию');
+        alert('Без категории');
         return false;
     }
     

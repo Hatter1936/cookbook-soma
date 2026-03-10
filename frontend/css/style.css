@@ -74,6 +74,7 @@
       .file-input-button {
           height: 50px;
           font-size: 18px;
+          border: 3px solid #752b25;
       }
 
       .filter-dropdown-content {
@@ -337,7 +338,7 @@
       display: flex;
       flex-direction: column;
       gap: 30px;
-      margin: 20px 0 70px;
+      margin: 0 0 30px;
       width: 100%;
       max-width: 1000px;
   }
@@ -482,29 +483,28 @@
       transform: scale(0.9) rotate(-5deg);
   }
 
-  .container-buttons {
-    margin-top: 20px;
+  .container-buttons { 
+    margin-top: 40px;
     display: flex;
     justify-content: space-between;
   }
 
+   .container-buttons * { 
+    font-size: 20px;
+    font-family: 'Chiron GoRound TC', sans-serif;
+  }
+
   #addrecipe {
-    margin-top: 30px;
     width: 250px;
     height: 50px;
-    font-size: 18px;
-    font-family: 'Chiron GoRound TC', sans-serif;
     font-weight: bold;
     border-color: #752b25;
   }
 
   #filter-button {
-    margin-top: 30px;
     width: 250px;
     height: 50px;
     padding: 0 20px;
-    font-family: 'Chiron GoRound TC', sans-serif;
-    font-size: 18px;
     border-radius: 35px;
     transition: var(--transition);
     background-color: var(--dark-brown);
@@ -571,6 +571,7 @@
 
   .onerecipe-info-maininfo p {
     font-size: 18px;
+    hyphens: auto;
   }
 
   .onerecipe-info img {
@@ -747,7 +748,7 @@
   .addrecipe-button {
     background-color: var(--accent);
     color: var(--vanilla);
-    border: 3px solid var(--dark-brown);
+    border: 3px solid #752b25;
     box-shadow: var(--shadow-button);
     cursor: url('../assets/images/knife.png'), pointer;
   }
@@ -805,7 +806,7 @@
       width: 60px;
       height: 60px;
       background-color: var(--accent);
-      border: 3px solid var(--dark-brown);
+      border: 3px solid #752b25;
       border-radius: 50%;
       color: var(--vanilla);
       font-size: 24px;
@@ -858,6 +859,7 @@
       padding: 15px 20px;
       resize: vertical;
       margin-top: 20px;
+      hyphens: auto;
   }
 
   #addrecipesave {
@@ -877,11 +879,13 @@
     padding: 10px 20px;
     height: 200px;
     width: 850px;
+    hyphens: auto;
   }
 
   #category {
-    width: 250px;
+    width: 270px;
     box-shadow: none;
+    border: 3px solid #752b25;
   }
 
   #cost, #time {
@@ -905,10 +909,7 @@
   #addingredient {
     height: 60px;
     width: 60px;
-    background-color: var(--accent);
     border-radius: 30px;
-    border: 3px solid var(--dark-brown);
-    color: var(--vanilla);
     text-align: center;
     line-height: 60px;
     box-shadow: var(--shadow-button);
@@ -917,10 +918,7 @@
   #addstep {
     height: 60px;
     width: 60px;
-    background-color: var(--accent);
     border-radius: 30px;
-    border: 3px solid var(--dark-brown);
-    color: var(--vanilla);
     text-align: center;
     line-height: 60px;
   }
@@ -929,6 +927,7 @@
     padding: 10px 20px;
     height: 200px;
     width: 850px;
+    hyphens: auto;
   }
 
   #addrecipesave {
@@ -1028,7 +1027,7 @@
   }
 
   .achievement-done {
-    margin-top: 70px;
+    margin-top: 50px;
   }
 
   .achievement-done h3 {
@@ -1037,6 +1036,7 @@
   }
 
   .achievement-list {
+    font-family: 'Shantell Sans';
     padding: 40px 50px;
     background-color: var(--div-color);
     border-radius: 50px;
@@ -1046,17 +1046,22 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    margin-bottom: 70px;
+    margin-bottom: 50px;
     border: 3px solid var(--dark-brown);
     gap: 50px;
   }
 
   .achievement-one {
-    height: 175px;
+    font-style: italic;
+    font-size: 26px;
+    height: 185px;
     width: 175px;
-    border-radius: 100px;
-    background-color: var(--dark-brown);
-    border: 2px solid var(--dark-brown);
+    display: flex;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    background-image: url('../assets/images/achievement-bg.png');
+    background-size: cover;
   }
 
   #username, #password, #confirm_password {
@@ -1086,19 +1091,17 @@
     height: 40px;
     width: 400px;
     background-color: var(--accent);
-    border-width: 0;
     border-radius: 20px;
     margin-top: 35px;
     margin-bottom: 25px;
     transition: var(--transition);
-    border: 3px solid var(--dark-brown);
+    border: 3px solid #742222;
     box-shadow: var(--shadow-button);
     transform: translateY(-2px);
   }
 
   #sign-in:hover {
     color: #ece9d6;
-    background-color: #8b2e28;
     transform: translateY(-4px) scale(1.02);
     box-shadow: 0 8px 0 #742222;
   }
