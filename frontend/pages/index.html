@@ -30,45 +30,45 @@
     
     <div class="container">
         <div class="container-buttons">
-            <a href="addrecipe.html"><input type="submit" id="filter-button" class="btn" value="Фильтры и сортировка"></a>
+            <button id="filter-button" class="btn">Фильтры и сортировка</button>
             <a href="addrecipe.html"><input type="submit" id="addrecipe" class="btn" value="Добавить рецепт"></a>
         </div>
-        <div class="filter-row">
-            <label for="filterCategory">Категория:</label>
-            <select id="filterCategory" class="filter-select">
-                <option value="">Все категории</option>
-                <option value="1">Закуска</option>
-                <option value="2">Горячее</option>
-                <option value="3">Холодное</option>
-                <option value="4">Салат</option>
-                <option value="5">Десерт</option>
-            </select>
-        </div>    
-        <div class="filter-row">
-            <label for="sortTime">Время приготовления:</label>
-            <select id="sortTime" class="filter-select">
-                <option value="">Без сортировки</option>
-                <option value="asc">Меньше по времени</option>
-                <option value="desc">Больше по времени</option>
-            </select>
-        </div>   
-        <div class="filter-row">
-            <label for="sortAlpha">По алфавиту:</label>
-            <select id="sortAlpha" class="filter-select">
-                <option value="">Без сортировки</option>
-                <option value="asc">А-Я</option>
-                <option value="desc">Я-А</option>
-            </select>
-        </div>   
-        <div class="filter-row checkbox-row">
-            <label>
-                <input type="checkbox" id="favoritesOnly">
-                Только избранное
-            </label>
-        </div> 
-        <div class="filter-buttons">
-            <button id="applyFilters" class="btn">Применить фильтры</button>
-            <button id="resetFilters" class="btn">Сбросить</button>
+
+        <div id="filterDropdown" class="filter-dropdown">
+            <div class="filter-dropdown-content">
+                <div class="filter-row">
+                    <label for="filterCategory">Категория:</label>
+                    <select id="filterCategory" class="filter-select">
+                        <option value="">Все категории</option>
+                    </select>
+                </div>    
+                <div class="filter-row">
+                    <label for="sortTime">Время приготовления:</label>
+                    <select id="sortTime" class="filter-select">
+                        <option value="">Без сортировки</option>
+                        <option value="asc">Сначала быстрые</option>
+                        <option value="desc">Сначала долгие</option>
+                    </select>
+                </div>   
+                <div class="filter-row">
+                    <label for="sortAlpha">По алфавиту:</label>
+                    <select id="sortAlpha" class="filter-select">
+                        <option value="">Без сортировки</option>
+                        <option value="asc">А-Я</option>
+                        <option value="desc">Я-А</option>
+                    </select>
+                </div>   
+                <div class="filter-row checkbox-row">
+                    <label>
+                        <input type="checkbox" id="favoritesOnly">
+                        Только избранное
+                    </label>
+                </div> 
+                <div class="filter-buttons">
+                    <button id="applyFilters" class="btn">Применить фильтры</button>
+                    <button id="resetFilters" class="btn">Сбросить</button>
+                </div>
+            </div>
         </div>
                 
         <div class="recipes">
@@ -77,6 +77,7 @@
     
 <script src="../js/auth.js"></script>
 <script src="../js/index.js"></script>
+<script src="../js/filter.js"></script>
 
 </body>
 </html>

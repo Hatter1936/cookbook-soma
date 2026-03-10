@@ -1,5 +1,3 @@
-// frontend/js/recipe.js
-
 document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
     const recipeId = urlParams.get('id');
@@ -38,10 +36,8 @@ async function loadRecipe(recipeId) {
 }
 
 function displayRecipe(recipe) {
-    // Заголовок страницы
     document.title = recipe.title;
     
-    // Основная информация
     const infoBlock = document.querySelector('.onerecipe-info-maininfo');
     infoBlock.querySelector('h3').textContent = recipe.title;
     infoBlock.querySelector('p:first-of-type').textContent = recipe.description || 'Нет описания';
@@ -51,7 +47,6 @@ function displayRecipe(recipe) {
         ${recipe.cooking_time} мин.
     `;
     
-    // Фото
     const mainImage = document.querySelector('.onerecipe-info img');
     if (recipe.photos && recipe.photos.length > 0) {
         mainImage.src = recipe.photos[0];
@@ -59,7 +54,6 @@ function displayRecipe(recipe) {
         mainImage.src = '../assets/images/default-recipe.jpg';
     }
     
-    // Ингредиенты
     const ingredientsList = document.querySelector('.onerecipe-ingredients-list');
     ingredientsList.innerHTML = '';
     
@@ -79,7 +73,6 @@ function displayRecipe(recipe) {
         ingredientsList.appendChild(ingredientDiv);
     });
     
-    // Шаги
     const stepsList = document.querySelector('.onerecipe-steps-list');
     stepsList.innerHTML = '';
     
@@ -100,7 +93,6 @@ function displayRecipe(recipe) {
         stepsList.appendChild(stepDiv);
     });
     
-    // Кнопки редактирования/удаления (только для своих рецептов)
     const userId = localStorage.getItem('user_id');
     if (userId && recipe.user_id && recipe.user_id.toString() === userId) {
         const buttonsDiv = document.querySelector('.onerecipe-buttons');

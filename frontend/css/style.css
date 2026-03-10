@@ -75,6 +75,45 @@
           height: 50px;
           font-size: 18px;
       }
+
+      .filter-dropdown-content {
+        min-width: 300px;
+        left: 0;
+        right: auto;
+        max-width: 90vw;
+    }
+    
+      .filter-dropdown-content .filter-row {
+          flex-direction: column;
+          align-items: flex-start;
+      }
+      
+      .filter-dropdown-content .filter-row label {
+          width: 100%;
+          margin-bottom: 8px;
+      }
+      
+      .filter-dropdown-content .filter-select {
+          width: 100%;
+      }
+      
+      .filter-dropdown-content .checkbox-row label {
+          margin-left: 0;
+      }
+      
+      .filter-dropdown-content .filter-buttons {
+          flex-direction: column;
+          gap: 10px;
+      }
+      
+      .filter-dropdown-content .filter-buttons .btn {
+          width: 100%;
+          margin: 0;
+      }
+      
+      .filter-dropdown-content::before {
+          left: 20px;
+      }
   }
 
 /*Shantell Sans*/
@@ -444,6 +483,7 @@
   }
 
   .container-buttons {
+    margin-top: 20px;
     display: flex;
     justify-content: space-between;
   }
@@ -481,10 +521,14 @@
   }
 
   #applyFilters {
+    font-family: 'Chiron GoRound TC', sans-serif;
+    font-size: 16px;
     border-color: #752b25;
   }
 
   #resetFilters {
+    font-family: 'Chiron GoRound TC', sans-serif;
+    font-size: 16px;
     border: 3px solid #44312b;
     background-color: var(--dark-brown);
     box-shadow: 0 6px 0 #44312b;
@@ -1099,6 +1143,131 @@
     border-radius: 5px;
     background-color: white;
     font-size: 14px;
+}
+
+.filter-dropdown {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.filter-dropdown-content {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 15px;
+    background-color: var(--div-color);
+    min-width: 400px;
+    max-width: 500px;
+    border-radius: 30px;
+    padding: 25px;
+    border: 3px solid var(--dark-brown);
+    box-shadow: var(--shadow-div);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+}
+
+.filter-dropdown-content.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.filter-dropdown-content::before {
+    content: '';
+    position: absolute;
+    top: -12px;
+    left: 30px;
+    width: 20px;
+    height: 20px;
+    background-color: var(--div-color);
+    border-top: 3px solid var(--dark-brown);
+    border-left: 3px solid var(--dark-brown);
+    transform: rotate(45deg);
+    z-index: -1;
+}
+
+.filter-dropdown-content .filter-row {
+    margin-bottom: 20px;
+}
+
+.filter-dropdown-content .filter-row label {
+    font-size: 18px;
+    color: var(--dark-brown);
+    width: 40%;
+}
+
+.filter-dropdown-content .filter-select {
+    width: 60%;
+    padding: 10px 15px;
+    background-color: var(--vanilla);
+    border: 3px solid var(--dark-brown);
+    border-radius: 30px;
+    font-family: 'Chiron GoRound TC', sans-serif;
+    font-size: 16px;
+    color: var(--dark-brown);
+    cursor: url('../assets/images/knife.png'), pointer;
+    transition: var(--transition);
+}
+
+.filter-dropdown-content .filter-select:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 0 var(--dark-brown);
+}
+
+.filter-dropdown-content .filter-select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 4px 0 var(--accent);
+}
+
+.filter-dropdown-content .checkbox-row label {
+    width: 100%;
+    margin-left: 0;
+    gap: 15px;
+    font-size: 18px;
+    cursor: url('../assets/images/knife.png'), pointer;
+}
+
+.filter-dropdown-content .checkbox-row input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    accent-color: var(--accent);
+    cursor: url('../assets/images/knife.png'), pointer;
+}
+
+.filter-dropdown-content .filter-buttons {
+    margin-left: 0;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+
+.filter-dropdown-content .filter-buttons .btn {
+    flex: 1;
+    padding: 10px 15px;
+    font-size: 18px;
+    margin: 0 5px;
+}
+
+body.menu-open::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 999;
+    pointer-events: none;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 .checkbox-row label {
