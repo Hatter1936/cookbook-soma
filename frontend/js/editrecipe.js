@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             <textarea class="addrecipe-field step-description" placeholder="Описание шага" rows="4" required>${stepData.description}</textarea>
             <button type="button" class="add-icon remove-step" style="margin-top:15px;width:40px;height:40px;">
-                <i class="fa-solid fa-minus"></i> Удалить шаг
+                <i class="fa-solid fa-minus"></i>
             </button>
         `;
 

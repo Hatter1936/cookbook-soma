@@ -84,7 +84,7 @@
     --div-color: #F0E6CB;
     --vanilla: #F4F1DE;
     --shadow-header: 0 6px 0 #44312b;
-    --shadow-button: 0 6px 0 #742222;
+    --shadow-button: 0 6px 0 #752b25;
     --shadow-div: 0 8px 0 #dbcbb3;
     --transition: all 0.2s cubic-bezier(0.2, 0.9, 0.3, 1.2);
   }
@@ -159,7 +159,7 @@
     padding: 12px 30px;
     border-radius: 30px;
     transition: var(--transition);
-    border: 3px solid var(--dark-brown);
+    border: 3px solid #752b25;
     text-align: center;
     box-shadow: var(--shadow-button);
     font-weight: bold;
@@ -443,6 +443,11 @@
       transform: scale(0.9) rotate(-5deg);
   }
 
+  .container-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+
   #addrecipe {
     margin-top: 30px;
     width: 250px;
@@ -450,24 +455,46 @@
     font-size: 18px;
     font-family: 'Chiron GoRound TC', sans-serif;
     font-weight: bold;
+    border-color: #752b25;
   }
 
-  .filter {
-    margin: 30px 15px 0 20px;
+  #filter-button {
+    margin-top: 30px;
+    width: 300px;
+    height: 50px;
+    padding: 0 20px;
     font-family: 'Chiron GoRound TC', sans-serif;
-    font-size: 20px;
-    display: flex;
-    justify-content: space-between;
-    background-color: var(--div-color);
-    padding: 10px 20px;
-    border-radius: 50px;
-    border: 3px solid var(--dark-brown);
-    box-shadow: var(--shadow-div);
+    font-size: 18px;
+    border-radius: 35px;
+    transition: var(--transition);
+    background-color: var(--dark-brown);
+    color: var(--vanilla);
+    border: 3px solid #44312b;
+    box-shadow: 0 6px 0 #44312b;
+    cursor: url('../assets/images/knife.png'), pointer;
   }
 
-  .filter p:hover {
-    color:#4d3933;
-    transform: translateY(-2px);
+  #filter-button:hover {
+    cursor: url('../assets/images/knife.png'), pointer;
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 0 #44312b;
+  }
+
+  #applyFilters {
+    border-color: #752b25;
+  }
+
+  #resetFilters {
+    border: 3px solid #44312b;
+    background-color: var(--dark-brown);
+    box-shadow: 0 6px 0 #44312b;
+    cursor: url('../assets/images/knife.png'), pointer;
+  }
+
+  #resetFilters:hover {
+    cursor: url('../assets/images/knife.png'), pointer;
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 0 #44312b;
   }
 
   .onerecipe {
@@ -488,6 +515,7 @@
   .onerecipe-info {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     gap: 40px;
   }
 
@@ -1059,9 +1087,9 @@
 }
 
 .filter-row label {
-    width: 150px;
-    font-weight: 500;
-    color: #555;
+    width: 25%;
+    font-weight: bold;
+    font-size: 18px;
 }
 
 .filter-select {
@@ -1075,7 +1103,7 @@
 
 .checkbox-row label {
     width: auto;
-    margin-left: 150px;
+    margin-left: 25%;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -1095,15 +1123,6 @@
     margin-left: 150px;
 }
 
-.btn-secondary {
-    background-color: #6c757d;
-}
-
-.btn-secondary:hover {
-    background-color: #5a6268;
-}
-
-/* Адаптивность */
 @media (max-width: 768px) {
     .filter-row {
         flex-direction: column;
