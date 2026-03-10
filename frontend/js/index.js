@@ -2,6 +2,61 @@ document.addEventListener('DOMContentLoaded', function() {
     loadRecipes();
     updateNavigation();
 
+    const filterButton = document.getElementById('filter-button');
+    const filterDropdown = document.getElementById('filterDropdown');
+    const filterContent = document.querySelector('.filter-dropdown-content');
+    
+    let isMenuOpen = false;
+    
+    function openMenu() {
+        if (filterContent) {
+            filterContent.classList.add('show');
+            document.body.classList.add('menu-open');
+            isMenuOpen = true;
+        }
+    }
+    
+    function closeMenu() {
+        if (filterContent) {
+            filterContent.classList.remove('show');
+            document.body.classList.remove('menu-open');
+            isMenuOpen = false;
+        }
+    }
+    
+    if (filterButton) {
+        filterButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (isMenuOpen) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        });
+    }
+    
+    document.addEventListener('click', function(e) {
+        if (isMenuOpen && 
+            filterDropdown && 
+            !filterDropdown.contains(e.target) && 
+            filterButton && 
+            !filterButton.contains(e.target)) {
+            closeMenu();
+        }
+    });
+    
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && isMenuOpen) {
+            closeMenu();
+        }
+    });
+    
+    if (filterDropdown) {
+        filterDropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
+
     const luckyBtn = document.querySelector('a[href=""]');
     if (luckyBtn) {
         luckyBtn.addEventListener('click', function(e) {
@@ -20,12 +75,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const applyBtn = document.getElementById('applyFilters');
     if (applyBtn) {
-        applyBtn.addEventListener('click', applyFilters);
+        applyBtn.addEventListener('click', function() {
+            applyFilters();
+            closeMenu();
+        });
     }
 
     const resetBtn = document.getElementById('resetFilters');
     if (resetBtn) {
-        resetBtn.addEventListener('click', resetFilters);
+        resetBtn.addEventListener('click', function() {
+            resetFilters();
+            closeMenu();
+        });
     }
 
     loadCategoriesForFilter();
@@ -98,10 +159,15 @@ async function applyFilters() {
 }
 
 function resetFilters() {
-    document.getElementById('filterCategory').value = '';
-    document.getElementById('sortTime').value = '';
-    document.getElementById('sortAlpha').value = '';
-    document.getElementById('favoritesOnly').checked = false;
+    const categorySelect = document.getElementById('filterCategory');
+    const sortTimeSelect = document.getElementById('sortTime');
+    const sortAlphaSelect = document.getElementById('sortAlpha');
+    const favoritesCheckbox = document.getElementById('favoritesOnly');
+    
+    if (categorySelect) categorySelect.value = '';
+    if (sortTimeSelect) sortTimeSelect.value = '';
+    if (sortAlphaSelect) sortAlphaSelect.value = '';
+    if (favoritesCheckbox) favoritesCheckbox.checked = false;
     
     loadRecipes();
 }
@@ -173,6 +239,7 @@ function displayRecipes(recipes) {
                         </button>
                     ` : ''}
                 </div>
+                
             </a>
         `;
     }).join('');
@@ -262,92 +329,31 @@ async function toggleFavorite(recipeId, event) {
 
 window.toggleFavorite = toggleFavorite;
 
-document.addEventListener('DOMContentLoaded', function() {
-    loadRecipes();
-    updateNavigation();
-
-    const filterButton = document.getElementById('filter-button');
-    const filterDropdown = document.getElementById('filterDropdown');
-    const filterContent = document.querySelector('.filter-dropdown-content');
+function updateNavigation() {
+    const token = localStorage.getItem('token');
+    const headerIcons = document.querySelector('.header-icons');
     
-    let isMenuOpen = false;
-    
-    function openMenu() {
-        filterContent.classList.add('show');
-        document.body.classList.add('menu-open');
-        isMenuOpen = true;
-    }
-    
-    function closeMenu() {
-        filterContent.classList.remove('show');
-        document.body.classList.remove('menu-open');
-        isMenuOpen = false;
-    }
-    
-    if (filterButton) {
-        filterButton.addEventListener('click', function(e) {
-            e.stopPropagation();
-            if (isMenuOpen) {
-                closeMenu();
-            } else {
-                openMenu();
+    if (headerIcons) {
+        if (token) {
+            headerIcons.innerHTML = `
+                <a href="profile.html" class="slowhover">Профиль</a>
+                <a href="#" id="logoutBtn" class="btn">Выйти</a>
+            `;
+            
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('username');
+                    window.location.href = 'index.html';
+                });
             }
-        });
-    }
-    
-    document.addEventListener('click', function(e) {
-        if (isMenuOpen && 
-            filterDropdown && 
-            !filterDropdown.contains(e.target) && 
-            filterButton && 
-            !filterButton.contains(e.target)) {
-            closeMenu();
+        } else {
+            headerIcons.innerHTML = `
+                <a href="login.html" class="slowhover">Вход</a>
+                <a href="register.html" class="btn">Регистрация</a>
+            `;
         }
-    });
-    
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && isMenuOpen) {
-            closeMenu();
-        }
-    });
-    
-    if (filterDropdown) {
-        filterDropdown.addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
     }
-
-    const luckyBtn = document.querySelector('a[href=""]');
-    if (luckyBtn) {
-        luckyBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            getRandomRecipe();
-        });
-        luckyBtn.textContent = 'Мне повезёт';
-    }
-
-    const addBtn = document.getElementById('addrecipe');
-    if (addBtn) {
-        addBtn.addEventListener('click', function() {
-            window.location.href = 'addrecipe.html';
-        });
-    }
-
-    const applyBtn = document.getElementById('applyFilters');
-    if (applyBtn) {
-        applyBtn.addEventListener('click', function() {
-            applyFilters();
-            closeMenu();
-        });
-    }
-
-    const resetBtn = document.getElementById('resetFilters');
-    if (resetBtn) {
-        resetBtn.addEventListener('click', function() {
-            resetFilters();
-            closeMenu();
-        });
-    }
-
-    loadCategoriesForFilter();
-});
+}
