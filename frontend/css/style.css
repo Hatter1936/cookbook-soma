@@ -1052,26 +1052,84 @@
   }
  
   .achievement-one {
-    font-style: italic;
-    font-size: 26px;
-    height: 185px;
-    width: 175px;
-    display: flex;
-    align-items: center;
-    text-align: center;
-    padding: 10px;
-    background-image: url('../assets/images/achievement-bg.png');
-    background-size: cover;
+      position: relative;
+      font-style: italic;
+      font-size: 26px;
+      height: 185px;
+      width: 175px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 10px;
+      background-image: url('../assets/images/achievement-bg.png');
+      background-size: cover;
+      transition: all 0.2s ease;
+      cursor: url('../assets/images/knife.png'), pointer;
+  }
+
+  .achievement-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--dark-brown);
+      z-index: 2;
+  }
+
+  .achievement-hover-info {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 220px;
+      background-color: var(--div-color);
+      border: 3px solid var(--dark-brown);
+      border-radius: 30px;
+      padding: 15px;
+      box-shadow: var(--shadow-div);
+      font-family: 'Shantell Sans', sans-serif;
+      font-size: 14px;
+      color: var(--dark-brown);
+      text-align: left;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+      z-index: 100;
+      line-height: 1.4;
+      pointer-events: none;
+  }
+
+  .achievement-one:hover .achievement-hover-info {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(5px);
+  }
+
+  .achievement-hover-info p {
+      font-style: normal;
+      font-weight: bold;
+      display: block;
+      font-size: 16px;
+      margin-bottom: 4px;
+      color: var(--accent);
+      font-family: 'Chiron GoRound TC', sans-serif;
+  }
+
+  .achievement-hover-info span {
+      display: block;
+      margin-bottom: 5px;
+  }
+
+  .achievement-date {
+      font-size: 12px;
+      color: #666;
+      margin-top: 5px;
+      font-style: italic;
   }
 
   .achievement-one:hover {
-    position: static;
-    font-size: 26px;
-    height: 300px;
-    width: 284px;
-    display: flex;
-    text-align: center;
-    padding: 10px;
+      font-size: 26px;
+      height: 185px;
+      width: 175px;
   }
 
   #username, #password, #confirm_password {

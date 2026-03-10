@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (recipeId) {
         loadRecipe(recipeId);
     } else {
-        // Если нет ID, показываем сообщение
         document.querySelector('.onerecipe').innerHTML = '<p>Рецепт не найден</p>';
     }
     
@@ -146,6 +145,5 @@ async function confirmDelete(recipeId) {
     }
 }
 
-// Делаем функции глобальными для onclick
 window.editRecipe = editRecipe;
 window.confirmDelete = confirmDelete;
