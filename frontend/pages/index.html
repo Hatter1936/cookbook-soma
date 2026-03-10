@@ -38,10 +38,13 @@
             <div class="filter-dropdown-content">
                 <div class="filter-row">
                     <label for="filterCategory">Категория:</label>
-                    <select id="filterCategory" class="filter-select">
-                        <option value="">Все категории</option>
-                    </select>
-                </div>    
+                    <div style="display: flex; gap: 10px; width: 60%;">
+                        <select id="filterCategory" class="filter-select" style="flex: 1;">
+                            <option value="">Все категории</option>
+                        </select>
+                        <button id="addCategoryBtn" class="btn" style="padding: 8px 15px; font-size: 16px; white-space: nowrap;">+</button>
+                    </div>
+                </div>   
                 <div class="filter-row">
                     <label for="sortTime">Время приготовления:</label>
                     <select id="sortTime" class="filter-select">
@@ -78,6 +81,7 @@
 <script src="../js/auth.js"></script>
 <script src="../js/index.js"></script>
 <script src="../js/filter.js"></script>
+<script src="../js/categories.js"></script>
 
 </body>
 </html>
