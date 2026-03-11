@@ -1,6 +1,8 @@
+from genericpath import exists
 import json
 import random
 import os
+from statistics import quantiles
 import uuid
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files.base import ContentFile
@@ -338,6 +340,12 @@ class RecipeView(View):
         return JsonResponse({'message': 'Рецепт удалён'}, status=200, json_dumps_params={'ensure_ascii': False})
 
     def put(self, request, pk=None):
+        print("\n" + "="*50)
+        print("МЕТОД PUT ВЫЗВАН")
+        print(f"Content-Type: {request.content_type}")
+        print(f"FILES: {request.FILES}")
+        print("="*50 + "\n")
+
         user = get_user_from_token(request)
         if not user:
             return JsonResponse({'error': 'Пользователь не авторизован!'}, status=401, json_dumps_params={'ensure_ascii': False})
@@ -359,8 +367,6 @@ class RecipeView(View):
                 price = request.POST.get('price')
                 ingredients = json.loads(request.POST.get('ingredients', '[]'))
                 steps = json.loads(request.POST.get('steps', '[]'))
-                
-                print(f"ОТЛАДКА: category_id из формы = {category_id}")
                 
                 from django.core.files.storage import default_storage
                 from django.core.files.base import ContentFile
@@ -404,7 +410,7 @@ class RecipeView(View):
                 data = json.loads(request.body)
                 data['step_photos'] = {}
             
-            print(f"ОТЛАДКА: data['category_id'] = {data.get('category_id')}")
+            print(f"ОТЛАДКА PUT: {data}")
             
             if 'title' in data:
                 recipe.title = data['title']
@@ -418,9 +424,9 @@ class RecipeView(View):
                 try:
                     category = Category.objects.get(id=data['category_id'])
                     recipe.category = category
-                    print(f"ОТЛАДКА: Категория найдена: {category.name}")
+                    print(f"Категория найдена: {category.name}, ID: {category.id}")
                 except Category.DoesNotExist:
-                    print(f"ОТЛАДКА: Категория с id {data['category_id']} НЕ НАЙДЕНА!")
+                    print(f"Категория с id {data['category_id']} не найдена!")
                     return JsonResponse({'error': f'Категория с id {data["category_id"]} не существует!'}, status=400, json_dumps_params={'ensure_ascii': False})
             if 'photos' in data:
                 recipe.photos = data['photos']
@@ -440,21 +446,40 @@ class RecipeView(View):
                     unit=unit
                 )
             
-            Recipe_steps.objects.filter(recipe=recipe).delete()
+            existing_steps = {step.step_number: step for step in Recipe_steps.objects.filter(recipe=recipe)}
             
             steps_data = data.get('steps', [])
             step_photos = data.get('step_photos', {})
             
+            new_step_numbers = set()
+            
             for i, step_data in enumerate(steps_data):
                 step_number = step_data.get('step_number', i + 1)
-                step_photo_url = step_photos.get(f'step_photo_{step_number}')
+                new_step_numbers.add(step_number)
                 
-                Recipe_steps.objects.create(
-                    recipe=recipe,
-                    step_number=step_number,
-                    description=step_data['description'],
-                    photo=step_photo_url
-                )
+                step_photo_key = f'step_photo_{step_number}'
+                step_photo_url = step_photos.get(step_photo_key)
+                
+                if step_number in existing_steps:
+                    step = existing_steps[step_number]
+                    step.description = step_data['description']
+                    if step_photo_url:
+                        step.photo = step_photo_url
+                    step.save()
+                    print(f"Обновлен шаг {step_number}, фото: {step_photo_url}")
+                else:
+                    Recipe_steps.objects.create(
+                        recipe=recipe,
+                        step_number=step_number,
+                        description=step_data['description'],
+                        photo=step_photo_url
+                    )
+                    print(f"Создан новый шаг {step_number}, фото: {step_photo_url}")
+            
+            for step_number, step in existing_steps.items():
+                if step_number not in new_step_numbers:
+                    step.delete()
+                    print(f"Удален шаг {step_number}")
             
             return JsonResponse({
                 'id': recipe.id,
