@@ -872,13 +872,13 @@
   }
 
   #title {
-    width: 850px;
+    width: 100%;
   }
 
   #description {
     padding: 10px 20px;
     height: 200px;
-    width: 850px;
+    width: 100%;
     hyphens: auto;
   }
 
@@ -932,7 +932,7 @@
 
   #addrecipesave {
     font-size: 24px;
-    width: 600px;
+    width: 100%;
     height: 70px;
     border-radius: 70px;
   }

@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const stepDiv = document.createElement('div');
         stepDiv.className = 'addrecipe-step step-row';
         
-        // Показываем текущее фото, если есть
+        // Показываем текущее фото, если есть (только для информации)
         let photoHtml = '';
         if (stepData.photo) {
             const photoUrl = stepData.photo.startsWith('http') 
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
             photoHtml = `
                 <div class="current-step-photo" style="margin: 10px 0;">
                     <img src="${photoUrl}" alt="Текущее фото" style="max-width: 150px; max-height: 150px; border-radius: 10px; border: 2px solid var(--dark-brown);">
-                    <p style="font-size: 12px; margin: 5px 0;">Текущее фото</p>
+                    <p style="font-size: 12px; margin: 5px 0;">Текущее фото (изменение фото не поддерживается)</p>
                 </div>
             `;
         }
@@ -73,10 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
         stepDiv.innerHTML = `
             <label>Шаг ${stepData.number}</label>
             ${photoHtml}
-            <div class="file-input-wrapper">
-                <input type="file" class="step-image" accept="image/*">
-                <div class="file-input-button">${stepData.photo ? 'Заменить фото' : 'Выбрать фото...'}</div>
-            </div>
+            <!-- Поле для загрузки фото убрано, так как отправка идёт без файлов -->
             <textarea class="addrecipe-field step-description" placeholder="Описание шага" rows="4" required>${stepData.description || ''}</textarea>
             <button type="button" class="add-icon remove-step" style="margin-top:15px;width:40px;height:40px;">
                 <i class="fa-solid fa-minus"></i>
@@ -126,6 +123,8 @@ document.addEventListener('DOMContentLoaded', function() {
             return categories;
         } catch (error) {
             console.error('Ошибка загрузки категорий:', error);
+            const select = document.getElementById('editcategory');
+            select.innerHTML = '<option value="">Ошибка загрузки категорий</option>';
             return [];
         }
     }
@@ -154,8 +153,14 @@ document.addEventListener('DOMContentLoaded', function() {
             // Устанавливаем категорию
             const categorySelect = document.getElementById('editcategory');
             if (recipe.category_id) {
-                categorySelect.value = recipe.category_id;
-                console.log('Установлена категория:', recipe.category_id);
+                const categoryId = recipe.category_id;
+                const options = categorySelect.options;
+                for (let i = 0; i < options.length; i++) {
+                    if (options[i].value == categoryId) {
+                        categorySelect.selectedIndex = i;
+                        break;
+                    }
+                }
             }
 
             // Загружаем ингредиенты
@@ -171,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 ingredientsContainer.appendChild(createIngredientRow());
             }
 
-            // Загружаем шаги с фото
+            // Загружаем шаги с фото (только для отображения, без возможности загрузки новых)
             if (recipe.steps && recipe.steps.length > 0) {
                 recipe.steps.sort((a, b) => a.step_number - b.step_number).forEach(step => {
                     stepsContainer.appendChild(createStepRow({
@@ -190,97 +195,73 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Обработчик отправки формы (JSON, без фото)
     editForm.addEventListener('submit', async function(e) {
         e.preventDefault();
 
-        const categoryId = document.getElementById('editcategory').value;
-        console.log('Выбранная категория ID:', categoryId);
-        
+        // Проверка категории
+        const categorySelect = document.getElementById('editcategory');
+        const categoryId = categorySelect.value;
         if (!categoryId) {
-            alert('Выберите категорию');
+            alert('Пожалуйста, выберите категорию');
             return;
         }
 
+        // Основные поля
+        const title = document.getElementById('edittitle').value;
+        const description = document.getElementById('editdescription').value;
+        const cost = document.getElementById('editcost').value;
+        const time = document.getElementById('edittime').value;
+
+        // Собираем ингредиенты
+        const ingredients = [];
+        document.querySelectorAll('#editingredients-container .ingredient-row').forEach(row => {
+            const name = row.querySelector('.ingredient-name').value;
+            const amount = row.querySelector('.ingredient-amount').value;
+            const unit = row.querySelector('.ingredient-unit').value;
+            if (name && amount && unit) {
+                ingredients.push({
+                    name: name,
+                    quantity: parseFloat(amount),
+                    unit: unit
+                });
+            }
+        });
+
+        // Собираем шаги (без фото)
+        const steps = [];
+        document.querySelectorAll('#editsteps-container .step-row').forEach((row, index) => {
+            const description = row.querySelector('.step-description').value;
+            if (description) {
+                steps.push({
+                    step_number: index + 1,
+                    description: description
+                    // photo не передаём — старые фото останутся без изменений
+                });
+            }
+        });
+
+        // Формируем объект для отправки
+        const data = {
+            title: title,
+            description: description,
+            category_id: parseInt(categoryId, 10),
+            price: cost ? parseFloat(cost) : null,
+            cooking_time: parseInt(time, 10),
+            ingredients: ingredients,
+            steps: steps
+        };
+
+        console.log('Отправляемые данные:', data);
+
         try {
-            const formData = new FormData();
-
-            // Основные поля - ВСЕГДА отправляем как строки
-            formData.append('title', String(document.getElementById('edittitle').value));
-            formData.append('description', String(document.getElementById('editdescription').value));
-            formData.append('category_id', String(categoryId));
-            
-            const cost = document.getElementById('editcost').value;
-            if (cost) {
-                formData.append('price', String(cost));
-            }
-            
-            formData.append('cooking_time', String(document.getElementById('edittime').value));
-
-            // Главное фото - только если выбрано новое
-            const mainPhoto = document.getElementById('editphoto').files[0];
-            if (mainPhoto) {
-                formData.append('main_photo', mainPhoto);
-                console.log('Добавлено новое главное фото:', mainPhoto.name);
-            }
-
-            // Ингредиенты
-            const ingredients = [];
-            document.querySelectorAll('#editingredients-container .ingredient-row').forEach(row => {
-                const name = row.querySelector('.ingredient-name').value;
-                const amount = row.querySelector('.ingredient-amount').value;
-                const unit = row.querySelector('.ingredient-unit').value;
-                
-                if (name && amount && unit) {
-                    ingredients.push({
-                        name: name,
-                        quantity: parseFloat(amount),
-                        unit: unit
-                    });
-                }
-            });
-            formData.append('ingredients', JSON.stringify(ingredients));
-
-            // Шаги и их фото
-            const steps = [];
-            const stepRows = document.querySelectorAll('#editsteps-container .step-row');
-            
-            for (let i = 0; i < stepRows.length; i++) {
-                const row = stepRows[i];
-                const description = row.querySelector('.step-description').value;
-                const stepImage = row.querySelector('.step-image').files[0];
-                const stepNumber = i + 1;
-
-                if (description) {
-                    steps.push({
-                        step_number: stepNumber,
-                        description: description
-                    });
-
-                    // Если выбрано новое фото для шага
-                    if (stepImage) {
-                        formData.append(`step_photo_${stepNumber}`, stepImage);
-                        console.log(`Добавлено фото для шага ${stepNumber}:`, stepImage.name);
-                    }
-                }
-            }
-            formData.append('steps', JSON.stringify(steps));
-
-            // ОТЛАДКА: выводим все поля FormData
-            console.log('=== ОТПРАВЛЯЕМЫЕ ДАННЫЕ ===');
-            for (let pair of formData.entries()) {
-                if (pair[0].includes('photo')) {
-                    console.log(pair[0] + ': [ФАЙЛ] ' + (pair[1].name || ''));
-                } else {
-                    console.log(pair[0] + ': ' + pair[1]);
-                }
-            }
-
             const response = await fetch(`http://localhost:8000/api/recipes/${recipeId}/`, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
                 },
-                body: formData
+                body: JSON.stringify(data)
             });
 
             if (response.ok) {
@@ -291,7 +272,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Ошибка ответа:', errorData);
                 throw new Error(errorData.error || errorData.detail || 'Ошибка при обновлении');
             }
-
         } catch (error) {
             console.error('Ошибка:', error);
             alert('Ошибка: ' + error.message);
@@ -299,6 +279,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Функция для случайного рецепта (оставлена без изменений)
 async function getRandomRecipe() {
     try {
         const response = await fetch('http://localhost:8000/api/recipes/random/');
