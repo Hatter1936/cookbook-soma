@@ -148,3 +148,35 @@ async function addCategory(name) {
         alert(error.message || 'Ошибка при создании категории');
     }
 }
+
+async function loadCategoriesForFilter() {
+    try {
+        const token = localStorage.getItem('token');
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+        
+        const response = await fetch('http://localhost:8000/api/recipes/categories/', {
+            headers: headers
+        });
+        const categories = await response.json();
+        
+        const select = document.getElementById('filterCategory');
+        if (select) {
+            const currentValue = select.value;
+            
+            select.innerHTML = '<option value="">Все категории</option>';
+            
+            categories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat.id;
+                option.textContent = cat.name;
+                select.appendChild(option);
+            });
+            
+            if (currentValue) {
+                select.value = currentValue;
+            }
+        }
+    } catch (error) {
+        console.error('Ошибка загрузки категорий:', error);
+    }
+}

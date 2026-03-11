@@ -4,6 +4,7 @@ from users.models import User
 class Category(models.Model):
     name = models.CharField(max_length=50)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    is_global = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -25,7 +26,7 @@ class Recipe_steps(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     step_number = models.PositiveIntegerField()
     description = models.TextField(blank=True)
-    photo = models.ImageField(upload_to='step_photo/', null=True, blank=True, verbose_name="Фото шага")
+    photo = models.ImageField(upload_to='steps/', null=True, blank=True)
 
     def __str__(self):
         return f"{self.recipe.title} - Шаг {self.step_number}"

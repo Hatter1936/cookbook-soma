@@ -1050,6 +1050,17 @@
     border: 3px solid var(--dark-brown);
     gap: 50px;
   }
+
+  .step-photo-preview {
+    margin: 15px 0;
+    text-align: center;
+}
+
+.step-photo-preview img {
+    border-radius: 15px;
+    border: 3px solid var(--dark-brown);
+    box-shadow: var(--shadow-div);
+}
  
   .achievement-one {
       position: relative;

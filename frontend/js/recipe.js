@@ -37,6 +37,7 @@ async function loadRecipe(recipeId) {
 function displayRecipe(recipe) {
     document.title = recipe.title;
     
+    // Основная информация
     const infoBlock = document.querySelector('.onerecipe-info-maininfo');
     infoBlock.querySelector('h3').textContent = recipe.title;
     infoBlock.querySelector('p:first-of-type').textContent = recipe.description || 'Нет описания';
@@ -46,52 +47,98 @@ function displayRecipe(recipe) {
         ${recipe.cooking_time} мин.
     `;
     
+    // Главное фото
     const mainImage = document.querySelector('.onerecipe-info img');
     if (recipe.photos && recipe.photos.length > 0) {
-        mainImage.src = recipe.photos[0];
+        let photoUrl = recipe.photos[0];
+        // Если путь не начинается с http, добавляем base URL
+        if (!photoUrl.startsWith('http')) {
+            // Убираем лишний /media/ если он уже есть в начале
+            if (photoUrl.startsWith('/media/')) {
+                photoUrl = `http://localhost:8000${photoUrl}`;
+            } else {
+                photoUrl = `http://localhost:8000/media/${photoUrl}`;
+            }
+        }
+        console.log('Главное фото URL:', photoUrl);
+        mainImage.src = photoUrl;
+        mainImage.onerror = function() {
+            console.log('Ошибка загрузки главного фото');
+            this.src = '../assets/images/default-recipe.jpg';
+        };
     } else {
         mainImage.src = '../assets/images/default-recipe.jpg';
     }
     
+    // Ингредиенты
     const ingredientsList = document.querySelector('.onerecipe-ingredients-list');
     ingredientsList.innerHTML = '';
     
-    recipe.ingredients.forEach(ing => {
-        const ingredientDiv = document.createElement('div');
-        ingredientDiv.className = 'onerecipe-ingredients-list-ingredient';
-        ingredientDiv.innerHTML = `
-            <div class="onerecipe-ingredients-list-ingredient-text">
-                <p>${escapeHtml(ing.name)}</p>
-            </div>
-            <div class="onerecipe-ingredients-list-ingredient-text">
-                <p>-</p>
-                <p>${ing.quantity}</p>
-                <p>${ing.unit}</p>
-            </div>
-        `;
-        ingredientsList.appendChild(ingredientDiv);
-    });
+    if (recipe.ingredients && recipe.ingredients.length > 0) {
+        recipe.ingredients.forEach(ing => {
+            const ingredientDiv = document.createElement('div');
+            ingredientDiv.className = 'onerecipe-ingredients-list-ingredient';
+            ingredientDiv.innerHTML = `
+                <div class="onerecipe-ingredients-list-ingredient-text">
+                    <p>${escapeHtml(ing.name)}</p>
+                </div>
+                <div class="onerecipe-ingredients-list-ingredient-text">
+                    <p>-</p>
+                    <p>${ing.quantity}</p>
+                    <p>${ing.unit}</p>
+                </div>
+            `;
+            ingredientsList.appendChild(ingredientDiv);
+        });
+    } else {
+        ingredientsList.innerHTML = '<p>Ингредиенты не указаны</p>';
+    }
     
+    // Шаги с фото
     const stepsList = document.querySelector('.onerecipe-steps-list');
     stepsList.innerHTML = '';
     
-    recipe.steps.forEach(step => {
-        const stepDiv = document.createElement('div');
-        stepDiv.className = 'onerecipe-steps-list-step';
-        stepDiv.innerHTML = `
-            <div class="onerecipe-steps-list-step-text">
-                <h4>Шаг ${step.step_number}</h4>
-                <p>${escapeHtml(step.description)}</p>
-            </div>
-            ${step.photo ? `
-                <div class="onerecipe-steps-list-step-img">
-                    <img src="${step.photo}" alt="Шаг ${step.step_number}">
+    if (recipe.steps && recipe.steps.length > 0) {
+        recipe.steps.forEach(step => {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = 'onerecipe-steps-list-step';
+            
+            // Фото шага
+            let stepPhotoHtml = '';
+            if (step.photo) {
+                let photoUrl = step.photo;
+                // Формируем правильный URL
+                if (!photoUrl.startsWith('http')) {
+                    if (photoUrl.startsWith('/media/')) {
+                        photoUrl = `http://localhost:8000${photoUrl}`;
+                    } else {
+                        photoUrl = `http://localhost:8000/media/${photoUrl}`;
+                    }
+                }
+                console.log(`Фото шага ${step.step_number}:`, photoUrl);
+                
+                stepPhotoHtml = `
+                    <div class="onerecipe-steps-list-step-img">
+                        <img src="${photoUrl}" alt="Шаг ${step.step_number}" 
+                            onerror="console.log('Ошибка загрузки фото шага ${step.step_number}'); this.onerror=null; this.style.display='none';">
+                    </div>
+                `;
+            }
+            
+            stepDiv.innerHTML = `
+                <div class="onerecipe-steps-list-step-text">
+                    <h4>Шаг ${step.step_number}</h4>
+                    <p>${escapeHtml(step.description)}</p>
                 </div>
-            ` : ''}
-        `;
-        stepsList.appendChild(stepDiv);
-    });
+                ${stepPhotoHtml}
+            `;
+            stepsList.appendChild(stepDiv);
+        });
+    } else {
+        stepsList.innerHTML = '<p>Шаги не указаны</p>';
+    }
     
+    // Кнопки для владельца
     const userId = localStorage.getItem('user_id');
     if (userId && recipe.user_id && recipe.user_id.toString() === userId) {
         const buttonsDiv = document.querySelector('.onerecipe-buttons');
@@ -102,6 +149,11 @@ function displayRecipe(recipe) {
                     <i class="fa-solid fa-trash-can"></i>
                 </button>
             `;
+        }
+    } else {
+        const buttonsDiv = document.querySelector('.onerecipe-buttons');
+        if (buttonsDiv) {
+            buttonsDiv.innerHTML = '';
         }
     }
 }
@@ -145,5 +197,22 @@ async function confirmDelete(recipeId) {
     }
 }
 
+async function getRandomRecipe() {
+    try {
+        const response = await fetch('http://localhost:8000/api/recipes/random/');
+        
+        if (!response.ok) {
+            throw new Error('Не удалось получить случайный рецепт');
+        }
+        
+        const recipe = await response.json();
+        window.location.href = `recipe.html?id=${recipe.id}`;
+    } catch (error) {
+        console.error('Ошибка:', error);
+        alert('Не удалось получить случайный рецепт');
+    }
+}
+
+window.getRandomRecipe = getRandomRecipe;
 window.editRecipe = editRecipe;
 window.confirmDelete = confirmDelete;

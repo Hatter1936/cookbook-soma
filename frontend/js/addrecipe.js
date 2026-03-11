@@ -30,7 +30,7 @@ async function loadCategories() {
         console.log('Загруженные категории:', categories);
         
         const categorySelect = document.getElementById('category');
-        categorySelect.innerHTML = '<option value="">Без категории</option>';
+        categorySelect.innerHTML = '<option value="">Выберите категорию</option>';
         
         categories.forEach(cat => {
             const option = document.createElement('option');
@@ -157,7 +157,7 @@ function validateForm() {
     }
     
     if (!category) {
-        alert('Без категории');
+        alert('Выберите категорию');
         return false;
     }
     
@@ -293,3 +293,21 @@ async function handleSubmit(e) {
         alert('Ошибка: ' + error.message);
     }
 }
+
+async function getRandomRecipe() {
+    try {
+        const response = await fetch('http://localhost:8000/api/recipes/random/');
+        
+        if (!response.ok) {
+            throw new Error('Не удалось получить случайный рецепт');
+        }
+        
+        const recipe = await response.json();
+        window.location.href = `recipe.html?id=${recipe.id}`;
+    } catch (error) {
+        console.error('Ошибка:', error);
+        alert('Не удалось получить случайный рецепт');
+    }
+}
+
+window.getRandomRecipe = getRandomRecipe;

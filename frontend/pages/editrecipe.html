@@ -13,10 +13,10 @@
             <div class="header-top">
                 <nav class="nav-main">
                     <ul>
-                        <img src="../assets/images/logo.png" class="logo"></img>
+                        <img src="../assets/images/logo.png" class="logo" alt="Логотип">
                         <li><a href="index.html">Мои рецепты</a></li>
                         <li><a href="achievements.html">Мои достижения</a></li>
-                        <li><a href="#">Мне повезёт</a></li>
+                        <li><a href="#" id="lucky-btn">Мне повезёт</a></li>
                     </ul>
                 </nav>
                 <div class="header-icons">
@@ -59,18 +59,14 @@
                 <div class="addrecipe-element">
                     <label for="editcategory">Категория</label>
                     <select id="editcategory" class="addrecipe-button" required>
-                        <option value="no_category">Без категории</option>
-                        <option value="breakfast">Завтрак</option>
-                        <option value="lunch">Обед</option>
-                        <option value="dinner">Ужин</option>
-                        <option value="dessert">Десерт</option>
+                        <option value="">Загрузка категорий...</option>
                     </select>
                 </div>
 
                 <div class="addrecipe-element">
                     <label for="editcost">Стоимость</label>
                     <div class="addrecipe-element-shortfield">
-                        <input type="text" class="addrecipe-field" id="editcost" pattern="\d*" inputmode="numeric" placeholder="0" required>
+                        <input type="number" class="addrecipe-field" id="editcost" min="0" step="0.01" placeholder="0">
                         <span>руб.</span>
                     </div>
                 </div>
@@ -78,7 +74,7 @@
                 <div class="addrecipe-element">
                     <label for="edittime">Время приготовления</label>
                     <div class="addrecipe-element-shortfield">
-                        <input type="text" class="addrecipe-field" id="edittime" pattern="\d*" inputmode="numeric" placeholder="0" required>
+                        <input type="number" class="addrecipe-field" id="edittime" min="1" step="1" placeholder="0" required>
                         <span>мин.</span>
                     </div>
                 </div>
@@ -108,6 +104,7 @@
         </form>
     </main>
 
+    <script src="../js/auth.js"></script>
     <script src="../js/editrecipe.js"></script>
 </body>
 </html>

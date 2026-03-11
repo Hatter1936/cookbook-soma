@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
             isMenuOpen = false;
         }
     }
-    
+
     if (filterButton) {
         filterButton.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -57,13 +57,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    const luckyBtn = document.querySelector('a[href=""]');
+    const luckyBtn = document.getElementById('lucky-btn');
     if (luckyBtn) {
         luckyBtn.addEventListener('click', function(e) {
             e.preventDefault();
             getRandomRecipe();
         });
-        luckyBtn.textContent = 'Мне повезёт';
     }
 
     const addBtn = document.getElementById('addrecipe');
@@ -94,7 +93,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function loadCategoriesForFilter() {
     try {
-        const response = await fetch('http://localhost:8000/api/recipes/categories/');
+        const token = localStorage.getItem('token');
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+        
+        const response = await fetch('http://localhost:8000/api/recipes/categories/', {
+            headers: headers
+        });
         const categories = await response.json();
         
         const select = document.getElementById('filterCategory');
@@ -212,17 +216,25 @@ function displayRecipes(recipes) {
     }
 
     container.innerHTML = recipes.map(recipe => {
-        const photo = recipe.photos && recipe.photos.length > 0
-            ? recipe.photos[0]
-            : '../assets/images/default-recipe.jpg';
-
-        const imageUrl = photo || '../assets/images/salat_moskovskiy_s_kopchenoy_kolbasoy.jpg';
+        let imageUrl = '../assets/images/default-recipe.jpg';
+        
+        if (recipe.photos && recipe.photos.length > 0) {
+            const photoPath = recipe.photos[0];
+            if (photoPath.startsWith('http')) {
+                imageUrl = photoPath;
+            } else if (photoPath.startsWith('/media/')) {
+                imageUrl = `http://localhost:8000${photoPath}`;
+            } else {
+                imageUrl = `http://localhost:8000/media/${photoPath}`;
+            }
+        }
         
         const favoriteIconClass = recipe.is_favorite ? 'fa-solid' : 'fa-regular';
 
         return `
             <a href="recipe.html?id=${recipe.id}" class="recipes-element">
-                <img src="${imageUrl}" alt="${escapeHtml(recipe.title)}" class="recipes-image">
+                <img src="${imageUrl}" alt="${escapeHtml(recipe.title)}" class="recipes-image"
+                     onerror="this.onerror=null; this.src='../assets/images/default-recipe.jpg';">
                 <div class="recipes-content">
                     <div class="recipes-text">
                         <h3 class="recipes-text-title">${escapeHtml(recipe.title)}</h3>
@@ -239,7 +251,6 @@ function displayRecipes(recipes) {
                         </button>
                     ` : ''}
                 </div>
-                
             </a>
         `;
     }).join('');
@@ -261,6 +272,22 @@ function showErrorMessage(message) {
                 <button onclick="location.reload()" class="btn">Повторить</button>
             </div>
         `;
+    }
+}
+
+async function getRandomRecipe() {
+    try {
+        const response = await fetch('http://localhost:8000/api/recipes/random/');
+        
+        if (!response.ok) {
+            throw new Error('Не удалось получить случайный рецепт');
+        }
+        
+        const recipe = await response.json();
+        window.location.href = `recipe.html?id=${recipe.id}`;
+    } catch (error) {
+        console.error('Ошибка:', error);
+        alert('Не удалось получить случайный рецепт');
     }
 }
 
@@ -312,3 +339,4 @@ async function toggleFavorite(recipeId, event) {
 }
 
 window.toggleFavorite = toggleFavorite;
+window.getRandomRecipe = getRandomRecipe;
