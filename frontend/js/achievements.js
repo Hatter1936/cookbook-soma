@@ -82,7 +82,7 @@ function createAchievementElement(achievement, isAchieved) {
     
     if (isAchieved) {
         div.innerHTML = `
-            <i class="fas ${icon}" style="font-size: 32px; margin-bottom: 10px;"></i>
+            <i class="fas ${icon}" style="font-size: 24px; margin-bottom: 10px;"></i>
             <h6 class="achievement-title">${escapeHtml(achievement.title)}</h6>
             <div class="achievement-hover-info">
                 <p>${escapeHtml(achievement.title)}</p>
@@ -93,7 +93,7 @@ function createAchievementElement(achievement, isAchieved) {
         `;
     } else {
         div.innerHTML = `
-            <i class="fas ${icon}" style="font-size: 32px; margin-bottom: 10px; opacity: 0.5;"></i>
+            <i class="fas ${icon}" style="font-size: 24px; margin-bottom: 10px; opacity: 0.5;"></i>
             <h6 class="achievement-title" style="opacity: 0.7;">${escapeHtml(achievement.title)}</h6>
             <div class="achievement-hover-info not-achieved">
                 <p>${escapeHtml(achievement.title)}</p>

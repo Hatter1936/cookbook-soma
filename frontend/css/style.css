@@ -22,101 +22,6 @@
     font-display: swap;
 }
 
-@media (max-width: 768px) {
-      .recipes-element {
-          flex-direction: column;
-          min-height: auto;
-      }
-      
-      .recipes-image {
-          width: 100%;
-          height: 200px;
-          border-radius: 24px 24px 0 0;
-      }
-      
-      .recipes-content {
-          flex-direction: column;
-          align-items: stretch;
-      }
-      
-      .recipes-favorite {
-          align-self: flex-end;
-      }
-      
-      .recipes-meta {
-          gap: 12px;
-      }
-      .addrecipe {
-          padding: 25px;
-      }
-      
-      .addrecipe-section {
-          gap: 20px;
-      }
-      
-      .addrecipe-element-rowelements {
-          flex-direction: column;
-      }
-      
-      .ingredient-name,
-      .ingredient-amount,
-      .ingredient-unit {
-          width: 100%;
-      }
-      
-      #addrecipesave {
-          max-width: 100%;
-      }
-      .file-input-wrapper {
-          height: 50px;
-      }
-      
-      .file-input-button {
-          height: 50px;
-          font-size: 18px;
-          border: 3px solid #752b25;
-      }
-
-      .filter-dropdown-content {
-        min-width: 300px;
-        left: 0;
-        right: auto;
-        max-width: 90vw;
-    }
-    
-      .filter-dropdown-content .filter-row {
-          flex-direction: column;
-          align-items: flex-start;
-      }
-      
-      .filter-dropdown-content .filter-row label {
-          width: 100%;
-          margin-bottom: 8px;
-      }
-      
-      .filter-dropdown-content .filter-select {
-          width: 100%;
-      }
-      
-      .filter-dropdown-content .checkbox-row label {
-          margin-left: 0;
-      }
-      
-      .filter-dropdown-content .filter-buttons {
-          flex-direction: column;
-          gap: 10px;
-      }
-      
-      .filter-dropdown-content .filter-buttons .btn {
-          width: 100%;
-          margin: 0;
-      }
-      
-      .filter-dropdown-content::before {
-          left: 20px;
-      }
-  }
-
 /*Shantell Sans*/
 :root {
     --accent: #A43931;
@@ -276,9 +181,19 @@
     border-radius: 20px;
   }
 
+  .nav-main {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+  }
+
   .nav-main ul {
     display: flex;
-    gap: 30px;
+    gap: 15px;
+    flex-wrap: wrap;
   }
 
   .nav-main a {
@@ -299,10 +214,16 @@
     transition: var(--transition);
   }
 
-  .header-icons {
+ .header-icons {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
+    flex-shrink: 0;
+  }
+
+  .header-icons .btn {
+    width: 200px;
   }
 
   .header-icons a {
@@ -332,6 +253,7 @@
   .authorization-block {
     border-radius: 35px;
     width: 430px;
+    max-width: 47%;
   }
 
   .recipes {
@@ -361,10 +283,11 @@
   }
 
   .recipes-image {
-      width: 160px;
-      object-fit: cover;
-      border-radius: 100px 0 0 100px;
-      border-right: 3px solid var(--dark-brown);
+    width: 100%;
+    max-width: 160px;
+    object-fit: cover;
+    border-radius: 100px 0 0 100px;
+    border-right: 3px solid var(--dark-brown);
   }
 
   .recipes-content {
@@ -1002,6 +925,10 @@
       outline: none;
   }
 
+  .form {
+    max-height: 100%;
+  }
+
   .form label {
     font-size: 18px;
   }
@@ -1065,14 +992,13 @@
   .achievement-one {
       position: relative;
       font-style: italic;
-      font-size: 26px;
       height: 185px;
       width: 175px;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 10px;
+      padding: 20px;
       background-image: url('../assets/images/achievement-bg.png');
       background-size: cover;
       transition: all 0.2s ease;
@@ -1080,7 +1006,7 @@
   }
 
   .achievement-title {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: bold;
       color: var(--dark-brown);
       z-index: 2;
@@ -1187,6 +1113,7 @@
     font-family: 'Chiron GoRound TC';
     height: 40px;
     width: 400px;
+    max-width: 100%;
     background-color: var(--vanilla);
     border: 3px solid var(--dark-brown);
     border-radius: 20px;
@@ -1208,6 +1135,7 @@
     padding: 2px;
     height: 40px;
     width: 400px;
+    max-width: 100%;
     background-color: var(--accent);
     border-radius: 20px;
     margin-top: 35px;
@@ -1413,26 +1341,192 @@ body.menu-open::after {
     margin-left: 150px;
 }
 
-@media (max-width: 768px) {
-    .filter-row {
-        flex-direction: column;
-        align-items: flex-start;
+@media (max-width:860px) {
+      .header-top {
+        padding: 10px 0;
+      }
+      
+      .nav-main {
+          flex-direction: column;
+          gap: 0px;
+          width: 100%;
+      }
+      
+      .nav-main ul {
+          width: 100%;
+          justify-content: center;
+          flex-wrap: wrap;
+          gap: 15px;
+      }
+      
+      .nav-main ul li {
+          margin-top: 0;
+      }
+      
+      .nav-main ul li a {
+          font-size: 18px;
+          white-space: nowrap;
+      }
+      
+      .header-icons {
+          width: 100%;
+          justify-content: center;
+          gap: 10px;
+      }
+      
+      .header-icons a .btn {
+          padding: 8px 20px;
+          font-size: 16px;
+          height: auto;
+          min-height: 40px;
+          line-height: 1.2;
+      }
+      
+      .logo {
+          height: 50px;
+      }
+
+      .recipes-element {
+          flex-direction: column;
+          min-height: auto;
+          border-radius: 70px;
+      }
+      
+      .recipes-image {
+          border-right: none;
+          border-radius: 0;
+          height: 200px;
+          max-width: 100%;
+      }
+      
+      .recipes-content {
+          flex-direction: column;
+          align-items: stretch;
+      }
+      
+      .recipes-favorite {
+          align-self: flex-end;
+      }
+      
+      .recipes-meta {
+          gap: 12px;
+      }
+      .addrecipe {
+          padding: 25px;
+      }
+      
+      .addrecipe-section {
+          gap: 20px;
+      }
+      
+      .addrecipe-element-rowelements {
+          flex-direction: column;
+      }
+      
+      .ingredient-name,
+      .ingredient-amount,
+      .ingredient-unit {
+          width: 100%;
+      }
+      
+      #addrecipesave {
+          max-width: 100%;
+      }
+      .file-input-wrapper {
+          height: 50px;
+      }
+      
+      .file-input-button {
+          height: 50px;
+          font-size: 18px;
+          border: 3px solid #752b25;
+      }
+
+      .filter-row {
+          flex-direction: column;
+          align-items: flex-start;
+      }
+      
+      .filter-row label {
+          width: auto;
+          margin-bottom: 5px;
+      }
+      
+      .filter-select {
+          width: 100%;
+      }
+      
+      .checkbox-row label {
+          margin-left: 0;
+      }
+      
+      .filter-buttons {
+          margin-left: 0;
+      }
+
+      .filter-dropdown-content {
+        min-width: 300px;
+        left: 0;
+        right: auto;
+        max-width: 90vw;
     }
     
-    .filter-row label {
-        width: auto;
-        margin-bottom: 5px;
-    }
-    
-    .filter-select {
-        width: 100%;
-    }
-    
-    .checkbox-row label {
-        margin-left: 0;
-    }
-    
-    .filter-buttons {
-        margin-left: 0;
-    }
-}
+      .filter-dropdown-content .filter-row {
+          flex-direction: column;
+          align-items: flex-start;
+      }
+      
+      .filter-dropdown-content .filter-row label {
+          width: 100%;
+          margin-bottom: 8px;
+      }
+      
+      .filter-dropdown-content .filter-select {
+          width: 100%;
+      }
+      
+      .filter-dropdown-content .checkbox-row label {
+          margin-left: 0;
+      }
+      
+      .filter-dropdown-content .filter-buttons {
+          flex-direction: column;
+          gap: 10px;
+      }
+      
+      .filter-dropdown-content .filter-buttons .btn {
+          width: 100%;
+          margin: 0;
+      }
+      
+      .filter-dropdown-content::before {
+          left: 20px;
+      }
+
+      .form h2 {
+        font-size: 28px;
+      }
+
+      .form p {
+        font-size: 14px;
+      }
+
+      #username, #password, #confirm_password {
+        margin-bottom: 10px;
+      }
+
+      @media (max-width: 480px) {
+        .header-icons a:not(.btn) {
+            display: none; /* Скрываем "Вход" */
+        }
+        
+        .nav-main ul {
+            gap: 10px;
+        }
+        
+        .nav-main ul li a {
+            font-size: 16px;
+            padding: 5px 8px;
+        }
+      }
+  }
