@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const addStepBtn = document.getElementById('editaddstep');
     const editForm = document.getElementById('editRecipeForm');
 
-    // Загружаем данные рецепта
     loadRecipeData();
 
     function createIngredientRow(ingredientData = { name: '', amount: '', unit: 'шт' }) {
@@ -56,16 +55,18 @@ document.addEventListener('DOMContentLoaded', function() {
         const stepDiv = document.createElement('div');
         stepDiv.className = 'addrecipe-step step-row';
         
-        // Показываем текущее фото, если есть (только для информации)
         let photoHtml = '';
-        if (stepData.photo) {
-            const photoUrl = stepData.photo.startsWith('http') 
-                ? stepData.photo 
+        if (stepData.photo && typeof stepData.photo === "string") {
+
+            const photoUrl = stepData.photo.startsWith('http')
+                ? stepData.photo
                 : `http://localhost:8000${stepData.photo}`;
+
             photoHtml = `
                 <div class="current-step-photo" style="margin: 10px 0;">
-                    <img src="${photoUrl}" alt="Текущее фото" style="max-width: 150px; max-height: 150px; border-radius: 10px; border: 2px solid var(--dark-brown);">
-                    <p style="font-size: 12px; margin: 5px 0;">Текущее фото (изменение фото не поддерживается)</p>
+                    <img src="${photoUrl}" alt="Текущее фото"
+                    style="max-width:150px;max-height:150px;border-radius:10px;border:2px solid var(--dark-brown);">
+                    <p style="font-size:12px;margin:5px 0;">Текущее фото</p>
                 </div>
             `;
         }
@@ -131,10 +132,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function loadRecipeData() {
         try {
-            // Сначала загружаем категории
             await loadCategories();
             
-            // Затем загружаем рецепт
             const response = await fetch(`http://localhost:8000/api/recipes/${recipeId}/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -142,15 +141,15 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!response.ok) throw new Error('Ошибка загрузки рецепта');
 
             const recipe = await response.json();
+            stepsContainer.innerHTML = '';
+            ingredientsContainer.innerHTML = '';
             console.log('Загружен рецепт:', recipe);
 
-            // Заполняем основные поля
             document.getElementById('edittitle').value = recipe.title || '';
             document.getElementById('editdescription').value = recipe.description || '';
             document.getElementById('editcost').value = recipe.price || '';
             document.getElementById('edittime').value = recipe.cooking_time || '';
 
-            // Устанавливаем категорию
             const categorySelect = document.getElementById('editcategory');
             if (recipe.category_id) {
                 const categoryId = recipe.category_id;
@@ -163,7 +162,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
 
-            // Загружаем ингредиенты
             if (recipe.ingredients && recipe.ingredients.length > 0) {
                 recipe.ingredients.forEach(ing => {
                     ingredientsContainer.appendChild(createIngredientRow({
@@ -176,7 +174,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 ingredientsContainer.appendChild(createIngredientRow());
             }
 
-            // Загружаем шаги с фото (только для отображения, без возможности загрузки новых)
             if (recipe.steps && recipe.steps.length > 0) {
                 recipe.steps.sort((a, b) => a.step_number - b.step_number).forEach(step => {
                     stepsContainer.appendChild(createStepRow({
@@ -195,11 +192,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Обработчик отправки формы (JSON, без фото)
     editForm.addEventListener('submit', async function(e) {
         e.preventDefault();
 
-        // Проверка категории
         const categorySelect = document.getElementById('editcategory');
         const categoryId = categorySelect.value;
         if (!categoryId) {
@@ -207,13 +202,11 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Основные поля
         const title = document.getElementById('edittitle').value;
         const description = document.getElementById('editdescription').value;
         const cost = document.getElementById('editcost').value;
         const time = document.getElementById('edittime').value;
 
-        // Собираем ингредиенты
         const ingredients = [];
         document.querySelectorAll('#editingredients-container .ingredient-row').forEach(row => {
             const name = row.querySelector('.ingredient-name').value;
@@ -228,7 +221,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Собираем шаги (без фото)
         const steps = [];
         document.querySelectorAll('#editsteps-container .step-row').forEach((row, index) => {
             const description = row.querySelector('.step-description').value;
@@ -236,16 +228,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 steps.push({
                     step_number: index + 1,
                     description: description
-                    // photo не передаём — старые фото останутся без изменений
                 });
             }
         });
 
-        // Формируем объект для отправки
         const data = {
             title: title,
             description: description,
-            category_id: parseInt(categoryId, 10),
+            category_id: categoryId ? parseInt(categoryId, 10) : null,
             price: cost ? parseFloat(cost) : null,
             cooking_time: parseInt(time, 10),
             ingredients: ingredients,
@@ -279,7 +269,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Функция для случайного рецепта (оставлена без изменений)
 async function getRandomRecipe() {
     try {
         const response = await fetch('http://localhost:8000/api/recipes/random/');

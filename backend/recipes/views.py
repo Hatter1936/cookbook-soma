@@ -407,7 +407,7 @@ class RecipeView(View):
                     'step_photos': step_photos,
                 }
             else:
-                data = json.loads(request.body)
+                data = json.loads(request.body.decode('utf-8'))
                 data['step_photos'] = {}
             
             print(f"ОТЛАДКА PUT: {data}")
@@ -432,7 +432,8 @@ class RecipeView(View):
                 recipe.photos = data['photos']
 
             recipe.save()
-            
+            print("Рецепт сохранён")
+
             Recipe_ingredients.objects.filter(recipe=recipe).delete()
             
             ingredients_data = data.get('ingredients', [])
@@ -454,7 +455,7 @@ class RecipeView(View):
             new_step_numbers = set()
             
             for i, step_data in enumerate(steps_data):
-                step_number = step_data.get('step_number', i + 1)
+                step_number = int(step_data.get('step_number', i + 1))
                 new_step_numbers.add(step_number)
                 
                 step_photo_key = f'step_photo_{step_number}'
@@ -464,16 +465,19 @@ class RecipeView(View):
                     step = existing_steps[step_number]
                     step.description = step_data['description']
                     if step_photo_url:
-                        step.photo = step_photo_url
+                        step.photo.name = step_photo_url
                     step.save()
                     print(f"Обновлен шаг {step_number}, фото: {step_photo_url}")
                 else:
-                    Recipe_steps.objects.create(
+                    step = Recipe_steps.objects.create(
                         recipe=recipe,
                         step_number=step_number,
-                        description=step_data['description'],
-                        photo=step_photo_url
+                        description=step_data['description']
                     )
+
+                    if step_photo_url:
+                        step.photo.name = step_photo_url
+                        step.save()
                     print(f"Создан новый шаг {step_number}, фото: {step_photo_url}")
             
             for step_number, step in existing_steps.items():
